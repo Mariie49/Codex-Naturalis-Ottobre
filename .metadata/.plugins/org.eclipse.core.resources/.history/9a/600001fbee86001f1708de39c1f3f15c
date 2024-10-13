@@ -1,0 +1,47 @@
+import java.util.ArrayList;
+import java.util.Random;
+
+import cards.Card;
+import cards.CornerPosition;
+import cards.SpecialSymbol;
+import cards.Symbol;
+import game.PlayArea;
+import game.Player;
+
+public class ObjectiveCard extends Card {
+
+	private int pointsForSatisfiedRequirement;
+	//private String RequirementType;
+	private ArrayList<Symbol> symbolRequirement;
+	private ArrayList<SpecialSymbol> specialSymbolRequirement;
+	private Object[][] positionRequirement;
+
+	public ObjectiveCard() {}
+
+
+	public static ObjectiveCard assignObjectiveCards(int n) {
+		ObjectiveCard card = null;
+
+
+	}
+	
+	private enum RequirementType() {
+		SIMBOL_Objective, SPECIALSYMBOL_Objective, POSITION_Objective;
+	}
+	
+
+	@Override
+	public String getAbbreviatedCorner(CornerPosition cornertype) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object[][] getPointsAssignment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+

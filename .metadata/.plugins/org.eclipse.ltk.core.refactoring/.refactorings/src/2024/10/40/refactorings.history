@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Symbol.java&apos; to &apos;cards.Symbol.java&apos;&#x0D;&#x0A;- Original project: &apos;src&apos;&#x0D;&#x0A;- Destination element: &apos;cards.Symbol.java&apos;&#x0D;&#x0A;- Original element: &apos;cards.Symbol.java&apos;" description="Copy compilation unit" destination="/&lt;cards{Symbol.java" element1="/&lt;cards{Symbol.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1728130598945" units="1" version="1.0"/>
+</session>

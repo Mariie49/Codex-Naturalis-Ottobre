@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="cards.CornerState"/>
+    <fullyQualifiedTypeName name="cards.Symbol"/>
+    <fullyQualifiedTypeName name="goldCard.GoldCard"/>
+    <fullyQualifiedTypeName name="game.PlayArea"/>
+    <fullyQualifiedTypeName name="cards.CardType"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+</qualifiedTypeNameHistroy>

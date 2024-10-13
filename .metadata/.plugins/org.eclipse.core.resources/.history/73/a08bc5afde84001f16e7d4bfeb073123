@@ -1,0 +1,350 @@
+/* PLAY AREA
+
+Ha i suoi bei metodini, ma fondamentalmente è una lista di PlayAreaItem che sono strutturati così:
+
+{Coordinate, Corner, CornerPosition, b_covered, Card}
+
+C'è da ragionare se salvare direttamente qua informazioni sui corners oppure estrarle dall'oggetto corner
+
+Metodini:
+
+	validPlacementsForGivenCorner(Card card, CornerPosition cornerposition)
+		restituisce una ArrayList di Coordinates, data la carta che si intende piazzare e il corner che si intende attaccare
+		calcola dove è possibile piazzare quel corner nella PlayArea rispettando alcuni contraints che per ora includono:
+			1) Angolo della PlayArea opposto all'angolo scelto
+	
+	placeCornerOnXYCoordinates (Coordinates coordinates ,Corner corner, Card card)
+		piazza il corner nelle coordinate date. Solo il corner, non la carta.
+		IMPORTANTE: Si occupa di coprire i corner che sono stati coperti dalla nuova carta
+		
+	placeInitialCard(InitialCard card)
+		piazza la carta iniziale con il corner in basso a sinistra in 0,0.
+		Di solito è il giocatore che piazza le carte
+		
+	getSymbolList ()
+		fruga sulla PlayArea e ottiene tutti i simboli normali che si vedono
+		
+	lista1ContenutaInLista2
+		restituisce true se la lista 1 è contenuta totalmente in lista 2
+		
+	verifyGoldCardRequirements
+	
+			
+ */
+
+package game;
+
+import java.util.ArrayList;
+import cards.Card;
+import cards.Corner;
+import cards.CornerPosition;
+import cards.CornerState;
+import initialCard.InitialCard;
+import cards.Coordinates;
+import cards.Symbol;
+import goldCard.GoldCard;
+
+public class PlayArea {
+    
+    // Lista per contenere gli oggetti PlayAreaItem
+    private ArrayList<PlayAreaItem> l_PlayAreaCorners;
+    private ArrayList<Symbol> l_Symbols;
+    private ArrayList<Card> l_Cards;
+
+    // Costruttore
+    public PlayArea() {
+        l_PlayAreaCorners = new ArrayList<>(); // Inizializza la lista
+    }
+    
+    // getter della lista
+    public ArrayList<PlayAreaItem> getPlayArea() {
+        return l_PlayAreaCorners;
+    }
+    
+    //
+    public boolean verifyGoldCardRequirements (GoldCard card) {
+    	if (lista1ContenutaInLista2(card.createRequirementsForPoints(),this.getSymbolList())) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    // Metodo che fruga in tutta la PlayArea e cerca i Symbol (che sono solo gli animaletti)
+    public ArrayList<Symbol> getSymbolList () { // TEST <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    	
+    	l_Symbols = new ArrayList<Symbol>();
+    	l_Cards = new ArrayList<Card>();
+    	
+    	for (PlayAreaItem item : l_PlayAreaCorners) {    		
+    		if (!item.isCovered()) {
+    			if (item.getCorner().getState() == CornerState.SYMBOL && (item.getCorner().getSymbol() instanceof Symbol)) {
+    				l_Symbols.add((Symbol) item.getCorner().getSymbol());
+    			}
+    		}
+    		// Controllo che la carta non sia già nella lista di carte, se non c'è la inserisco
+    		if (!l_Cards.contains(item.getCard())) {
+    			l_Cards.add(item.getCard());
+    		}
+    	}    	
+    	// ciclo sulla lista di carte
+    	for (Card item : l_Cards) {
+    		// Controllo che la carta abbia "centralSymbol"
+    		if (item.hasCentralSymbol()) {
+    			// Se sì aggiungo il simbolo alla lista dei miei simboli
+    			l_Symbols.addAll(item.addCentralSymbol());    			
+    		}
+    	}    	
+    	return l_Symbols;
+    }
+    
+    // Metodo che fruga in tutta la PlayArea e cerca i SpecialSymbol (che sono solo calamaio, piuma e manoscritto)
+    public ArrayList<SpecialSymbol> getSpecialSymbolList () { // TEST <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    	
+    	l_Symbols = new ArrayList<SpecialSymbol>();
+    	l_Cards = new ArrayList<Card>();
+    	
+    	for (PlayAreaItem item : l_PlayAreaCorners) {    		
+    		if (!item.isCovered()) {
+    			if (item.getCorner().getState() == CornerState.SYMBOL && (item.getCorner().getSymbol() instanceof Symbol)) {
+    				l_Symbols.add((Symbol) item.getCorner().getSymbol());
+    			}
+    		}
+    		// Controllo che la carta non sia già nella lista di carte, se non c'è la inserisco
+    		if (!l_Cards.contains(item.getCard())) {
+    			l_Cards.add(item.getCard());
+    		}
+    	}    	
+    	// ciclo sulla lista di carte
+    	for (Card item : l_Cards) {
+    		// Controllo che la carta abbia "centralSymbol"
+    		if (item.hasCentralSymbol()) {
+    			// Se sì aggiungo il simbolo alla lista dei miei simboli
+    			l_Symbols.addAll(item.addCentralSymbol());    			
+    		}
+    	}    	
+    	return l_Symbols;
+    }
+    
+    // Metodo per ottenere dove un dato corner può essere piazzato
+    public ArrayList<Coordinates> validPlacementsForGivenCorner(Card card, CornerPosition givenCornerPosition) {
+        ArrayList<Coordinates> viableCoordinates = new ArrayList<>();
+
+        // Passo 1.1: Ciclo su tutta la PlayArea
+        for (PlayAreaItem ii_playAreaItem : l_PlayAreaCorners) {
+        	boolean coordinatesAreViable = true;
+        	
+        	// System.out.println("Controllo il punto: ("+ii_playAreaItem.getCoordinates().getX()+", "+ii_playAreaItem.getCoordinates().getY()+")");
+        	
+        	// Ciclo su tutte le posizioni sulle quali verrebbe piazzato il corner.
+        	for (Corner ii_Corner : card.addCorners()) {
+        		//
+
+        		int x_carta = ii_playAreaItem.getCoordinates().getX() + (ii_Corner.getPosition().getRowOffset() - givenCornerPosition.getRowOffset());
+        		int y_carta = ii_playAreaItem.getCoordinates().getY() + (ii_Corner.getPosition().getColOffset() - givenCornerPosition.getColOffset());
+        		
+        		PlayAreaItem cornerDaControllare = getPlayAreaCorner(new Coordinates(x_carta,y_carta));
+        		
+        		// Se non trovo niente in quelle coordinate allora vanno bene punto
+        		//System.out.println("Controllo se esiste un corner in x= " + x_carta + " ,y= " + y_carta);
+        		if (null == cornerDaControllare) {
+		        	continue;
+        		}
+        		
+		        // Controllo se l'angolo corrente è diverso da quello dato
+        		CornerPosition cornerPositionPlayArea = cornerDaControllare.getCornerPosition();
+        		CornerPosition cornerPositionCarta = ii_Corner.getPosition();
+        		//System.out.println("PositionPlayArea= " + x_carta+", "+y_carta + " ,positionCarta= " + cornerPositionCarta);
+        		//System.out.println("cornerPositionPlayArea= " + cornerPositionPlayArea + " ,cornerPositionCarta= " + cornerPositionCarta);
+		        if (cornerPositionPlayArea.getOpposite() != cornerPositionCarta) {
+		        	//System.out.println("CornerPositions incompatibili");
+		        	coordinatesAreViable = false;
+		        	break;
+		        }
+		        
+		        // Controllo che l'angolo sul quale sto per piazzare l'angolo della carta che ho deciso di piazzare non sia NULL:		        
+		        if (ii_Corner.getState() == CornerState.NULL) {
+		        	coordinatesAreViable = false;
+		        	break;
+		        }
+		        
+		        
+		        // Controllo che nessuno dei due angoli sia NULL
+		        
+		        // Controllo che GLI ALTRI angoli non siano NULL
+		        		        
+            }
+        	
+        	//System.out.println("Ho appena controllato le coordinate play area: " + ii_playAreaItem.getCoordinates());
+        	if (coordinatesAreViable) {
+        		viableCoordinates.add(ii_playAreaItem.getCoordinates());
+        	}
+        }
+        return viableCoordinates;
+    }
+       
+    //Metodo per aggiungere una carta alla PlayArea:
+    // Il metodo NON controlla che le coordinate siano valide!!!!
+    public boolean placeCornerOnXYCoordinates (Coordinates coordinates ,Corner corner, Card card) {   	
+    	
+    	// Copro il corner che si trovava già in queste coordinate: ciclo sulle vecchie coordinate
+    	for (PlayAreaItem oldPlayAreaCorner : l_PlayAreaCorners) {
+    		
+    		// Controllo se le coordinate corrispondono
+	        if (oldPlayAreaCorner.coordinates.getX()==coordinates.getX() && oldPlayAreaCorner.coordinates.getY()==coordinates.getY()) {  
+	            oldPlayAreaCorner.covered = true;  // Segno come coperto il corner esistente
+	        }
+    	}
+      	   	
+    	// Inizializzo l'oggetto e BAM
+    	PlayAreaItem playAreaObject;    	
+    	playAreaObject = new PlayAreaItem(coordinates, corner, card);    	
+        l_PlayAreaCorners.add(playAreaObject);
+        return true;
+    }
+    
+    // Metodo per estrarre dalla lista l_PlayAreaCorners date le coordinate
+    public PlayAreaItem getPlayAreaCorner(Coordinates givenCoordinates) {
+        for (PlayAreaItem item : l_PlayAreaCorners) {
+            Coordinates coordinates = item.getCoordinates();
+            
+            if (!item.isCovered()) {
+	            if (coordinates.getX() == givenCoordinates.getX() && coordinates.getY() == givenCoordinates.getY()) {
+	                return item;  // Oggetto trovato
+	            }
+            }
+        }
+        return null;  // Coordinate non trovate
+    }
+    
+    
+    // Metodo per aggiungere la carta iniziale
+    public void placeInitialCard(InitialCard card) {
+    	System.out.println("Carta iniziale numero: " + card.getNumber());
+        for (Corner ii : card.addCorners()) {  // Ciclo sui 4 corners della carta
+            
+            PlayAreaItem playAreaObject;
+            
+            // Creazione del nuovo oggetto Coordinates per ogni posizione
+            switch (ii.getPosition()) {
+                case BOTTOM_LEFT:
+                    playAreaObject = new PlayAreaItem(new Coordinates(0, 0), ii, card);
+                    l_PlayAreaCorners.add(playAreaObject);
+                    break;
+                case TOP_LEFT:
+                    playAreaObject = new PlayAreaItem(new Coordinates(0, 1), ii, card);
+                    l_PlayAreaCorners.add(playAreaObject);
+                    break;
+                case TOP_RIGHT:
+                    playAreaObject = new PlayAreaItem(new Coordinates(1, 1), ii, card);
+                    l_PlayAreaCorners.add(playAreaObject);
+                    break;
+                case BOTTOM_RIGHT:
+                    playAreaObject = new PlayAreaItem(new Coordinates(1, 0), ii, card);
+                    l_PlayAreaCorners.add(playAreaObject);
+                    break;
+                default:
+                    System.out.println("Posizione sconosciuta: " + ii.getPosition());
+                    break;
+            }
+        }
+    }
+
+    
+    // Metodo per stampare tutte le informazioni della PlayArea
+    public void printPlayArea() {
+        for (PlayAreaItem item : l_PlayAreaCorners) {
+            System.out.println(item.printPlayAreaItem());
+        }        
+        System.out.println("Simboli nella PlayArea:");
+        System.out.println(getSymbolList());
+    }
+
+    // Classe interna per rappresentare un elemento nella PlayArea
+    private class PlayAreaItem {
+        private Coordinates coordinates;  // Sostituzione di x e y con l'oggetto Coordinates
+        private Corner corner;
+        private CornerPosition cornertype;
+        private boolean covered;
+        private Card card;
+        private String simbolo;
+
+        // Costruttore per PlayAreaItem che accetta l'oggetto Coordinates
+        public PlayAreaItem(Coordinates coordinates, Corner corner, Card card) {
+            if (corner == null || card == null) {
+                throw new IllegalArgumentException("Corner or Card cannot be null.");
+            }
+            this.coordinates = coordinates;
+            this.corner = corner;
+            this.cornertype = corner.getPosition();
+            this.covered = false;
+            this.card = card;
+            this.simbolo = card.getAbbreviatedCorner(cornertype);
+        }
+
+	    // metodo per una visualizzazione della PlayArea
+	    public String printPlayAreaItem() {
+	        return 	"PAI Coord: " + coordinates + ", " +
+	        		"Cov: " + covered + ", " +
+	        		"CorType: " + cornertype + ", " +
+	        		"CorState: " + simbolo + ", " +
+	        		"Card: " + card.getNumber();
+	    }
+	    
+	    public CornerPosition getCornerPosition() {
+	    	return this.cornertype;
+	    }
+	    
+	    public Coordinates getCoordinates() {
+	    	return this.coordinates;
+	    }
+	    
+	    public boolean isCovered() {
+	    	return this.covered;
+	    }
+	    
+	    public Corner getCorner() {
+	    	return this.corner;
+	    }
+	    
+	    public Card getCard() {
+	    	return this.card;
+	    }
+    }
+    
+    public static <T> boolean lista1ContenutaInLista2(ArrayList<T> lista1, ArrayList<T> lista2) {
+        // copia della lista
+        ArrayList<T> tempLista2 = new ArrayList<>(lista2);
+        
+        for (T item : lista1) {
+            if (!tempLista2.contains(item)) {
+                return false; // Se un elemento di lista1 non è presente in lista2, ritorna false
+            } else {
+                // Se l'elemento esiste, rimuovilo da tempLista2
+                tempLista2.remove(item);
+            }
+        }        
+        // Se tutti gli elementi di lista1 sono stati trovati, ritorna true
+        return true;
+    }
+    
+    /*
+    // Metodo per il controllo della carta
+    public boolean checkCornerOnXYCoordinates (Coordinates coordinates ,Corner corner, Card card) {
+    	for (PlayAreaItem oldPlayAreaCorner : l_PlayAreaCorners) {
+    		
+    		// Controllo che il corner che sto andando a coprire abbia "CornerPosition opposta a quello che sto per piazzare
+    		if (oldPlayAreaCorner.coordinates.getX()==coordinates.getX() && oldPlayAreaCorner.coordinates.getY()==coordinates.getY()) {
+    			if(oldPlayAreaCorner.getCornerPosition().getOpposite() == corner.getPosition()) {
+    				System.out.println("Controllo corners opposti superato per le coordinate " + coordinates);
+    			} else {
+    				System.out.println("Controllo corners opposti NON superato per le coordinate " + coordinates);
+    				return false;
+    			}
+    		}
+    	}
+    	return true;
+    }
+    */
+}
