@@ -24,7 +24,7 @@ public abstract class InitialCard extends Card {
 	private boolean isPlaced = false; 
 	private boolean hasCentralSymbol;
 	private Symbol symbolA;
-	private final Scanner in = new Scanner(System.in);
+	private final Scanner scanner = new Scanner(System.in);
 	public InitialCard () {}
 
 	@Override
@@ -293,22 +293,22 @@ public abstract class InitialCard extends Card {
         InitialCard card = null;
         boolean validChoice = false; 
 
-        System.out.println("Scegli il fronte o il retro della carta?");
+        System.out.println("Scegli il fronte o il retro della prima carta da collocare sul tuo manoscritto?");
         System.out.println("1. Fronte");
         System.out.println("2. Retro");
 
         while (!validChoice) {
         	
-        	while (!in.hasNextInt()) {
+        	while (!scanner.hasNextInt()) {
         	    System.out.println("Input non valido. Inserisci un numero.");
-        	    in.next(); // Scarta l'input non valido
+        	    scanner.next(); // Scarta l'input non valido
         	}
-        	int choice = in.nextInt();
+        	int choice = scanner.nextInt();
         	
             // Verifica che la scelta sia valida (1 o 2)
             if (choice != 1 && choice != 2) {
                 System.out.println("Scelta non valida. Inserisci 1 o 2.");
-                break;
+                continue;
             }
             System.out.println("Hai scelto il numero: " + choice);
 

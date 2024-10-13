@@ -33,6 +33,7 @@ import initialCard.*;
 import resourceCard.*;
 import cards.Card;
 import cards.CornerPosition;
+import cards.SpecialSymbol;
 //import cards.Symbol;
 //import game.PlayArea.PlayAreaItem;
 import cards.Corner;
@@ -44,6 +45,7 @@ public class Player {
 	private String name;
 	private final int id;
 	private int points;
+	private int achievedObjectiveCards;
 	private boolean isFirst;
 	private PlayArea playerPlayArea;
 	private ArrayList <Card> hand;
@@ -70,33 +72,39 @@ public class Player {
 		String stringRule = null;
 		int pointsMultiplier = 999;
 		
-	    for (Object[] ii : playedCard.getPointsAssignment()) {
+	    for (Object[] coppiaPuntoRegola : playedCard.getPointsAssignment()) {
 	    	// Estraggo la regola di assegnamento che ha punteggio diverso da zero
-	        if ((int)ii[0] != 0) {// Solo uno dei possibili punti è diverso da zero
-	        	stringRule = (String) ii[1];	// Regola di assegnamento
-	        	pointsMultiplier = (int) ii[0];	// Moltiplicatore di punti assegnati
+	        if ((int)coppiaPuntoRegola[0] != 0) {// Solo uno dei possibili punti è diverso da zero
+	        	stringRule = (String) coppiaPuntoRegola[1];	// Regola di assegnamento
+	        	pointsMultiplier = (int) coppiaPuntoRegola[0];	// Moltiplicatore di punti assegnati
 	        	
 	            break; // Esci dal ciclo una volta trovato l'elemento
 	        }
-	        if (stringRule == null) {stringRule = "nessun punto";}
+	        if (stringRule == null) {stringRule = "nessun punto"; pointsMultiplier = 0;}
 	    }
 	    // A seconda della regola stabilita succedono cose
 		switch (stringRule) {
 		
 			case "nessun punto":
-				// Non succede niente serve solo per entrare nello switch con un valore non vuoto
+				// Non succede niente serve solo per entrare nello switch con un valore non vuoto	
+				pointsValue = pointsMultiplier;
 			break;
 	    	case "niente": // Questo caso aggiunge punti secchi al giocatore
 	    		pointsValue = pointsMultiplier;
 	    		
 	    		//System.out.println("Hai guadagnato " + pointsMultiplier + " punti secchi!");
 	    	break;
-	    	case "QUILL","MANUSCRIPT","INKWELL": // Questo caso da 1 punto per ogni occorrenza di SpecialSymbol nella PlayArea PRIMA che la carta sia collocata
-	    		// conto le occorrenze dello SpecialSymbol in questione nella lista degli specialsymbols presenti sulla playarea
-	    		int newpoints = pointsMultiplier * Collections.frequency(playerPlayArea.getSpecialSymbolList(),stringRule);
-	    		pointsValue = newpoints;
+	    	case "QUILL","MANUSCRIPT","INKWELL": // Questo caso da 1 punto per ogni occorrenza di SpecialSymbol nella PlayArea 
+	    		// PRIMA che la carta sia collocata
+	    		// conto quante volte lo SpecialSymbol in questione compare nella PlayARea
+	    		ArrayList<String> tempList = new ArrayList<>();
+	    		for (SpecialSymbol item : this.getPlayArea().getSpecialSymbolList()) {
+	    			tempList.add(item.toString());
+	    		}
 	    	
-	    		System.out.println("Sulla tua PlayArea c'erano "+newpoints+" "+stringRule+" e hai guadagnato altrettanti punti!");
+	    		pointsValue = pointsMultiplier * Collections.frequency(tempList,stringRule);
+	    	
+	    		System.out.println("Sulla tua PlayArea c'erano "+pointsValue+" "+stringRule+" e hai guadagnato altrettanti punti!");
 	    	break;
 	    	case "coveredCards": // Questo caso da 2 punti per ogni corner che la carta piazzata va a coprire sulla PlayArea
 	    		
@@ -124,6 +132,7 @@ public class Player {
 			break;	
 			
 			default:
+				System.err.println("Non sei entrato in nessuna stringrule valida");
 				pointsValue = 999;
 			break;
 		}	
@@ -245,14 +254,6 @@ public class Player {
 		this.points += points;
 	}
 
-	public int totalPoints() {
-		int total = 0;
-		//total += personalGoalPoints();
-		total += points;
-		//total += playerPlayArea.nearbySymbolsScore();
-		return total;
-	}
-
 	/*
 	 * public ArrayList <ResourceCard> addResourceCardToHand(ResourceCard card) {
 		handResourceCard.add(card);
@@ -278,7 +279,7 @@ public class Player {
 		    // Ciclo finché l'utente non inserisce una scelta valida
 		    while (choice < 0 || choice > 6) {
 		        System.out.println("\nScegli cosa vuoi fare tra:");
-		        System.out.println("0 - giocare una carta (esce dal ciclo)");
+		        System.out.println("0 - giocare una carta");
 		        System.out.println("1 - Vedere la PlayArea");
 		        System.out.println("2 - Vedere le carte obiettivo comuni");
 		        System.out.println("3 - Vedere le carte scoperte sul tavolo che possono essere pescate");
@@ -303,6 +304,8 @@ public class Player {
 		    	break;
 		    	case 1: // Vedere la PlayArea
 		    		playerPlayArea.printPlayAreaGrid();
+		    		System.out.println("\n");
+		    		System.out.println("Risorse disponibili: " + this.getPlayArea().getSymbolList());		    		
 		    	break;
 		    	case 2: // Vedere le carte Obiettivo Comuni
 		    		for (Card objcard : visibleObjectiveCards) {objcard.printCard();}
@@ -561,6 +564,14 @@ public class Player {
 	
 	public void setPlayerObjectiveCard(Card playerObjectiveCard) {
 		this.playerObjectiveCard = playerObjectiveCard;
+	}
+
+	public int getAchievedObjectiveCards() {
+		return achievedObjectiveCards;
+	}
+
+	public void addAchievedObjectiveCards(int num) {
+		this.achievedObjectiveCards =+ num;
 	}
 }
 

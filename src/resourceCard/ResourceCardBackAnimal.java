@@ -76,10 +76,7 @@ public class ResourceCardBackAnimal extends ResourceCard {
 	public boolean hasCentralSymbol() {
 		return hasCentralSymbol;
 	}
-	@Override
-	public Symbol getCentralSymbol() {
-		return ResourceCardBackAnimal.symbol;
-	}
+
 	
 	
 

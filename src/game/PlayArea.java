@@ -141,7 +141,11 @@ public class PlayArea {
     		// Controllo che la carta abbia "centralSymbol"
     		if (item.hasCentralSymbol()) {
     			// Se sì aggiungo il simbolo alla lista dei miei simboli
-    			l_Symbols.addAll(item.addCentralSymbol());    			
+    			if (item.getType() == CardType.STARTING) {
+    				l_Symbols.addAll(item.addCentralSymbol());    			
+	    		} else {
+	    			l_Symbols.add(item.getKingdom());   
+	    		}
     		}
     	}    	
     	return l_Symbols;
@@ -150,10 +154,14 @@ public class PlayArea {
     // Metodo che fruga in tutta la PlayArea e cerca i SpecialSymbol (che sono solo calamaio, piuma e manoscritto)
     // Gli SpecialSymbols sono solo sui corners delle carte, mai al centro
     public ArrayList<SpecialSymbol> getSpecialSymbolList () { //
+    	boolean debugMode = false;
     	l_SpecialSymbols = new ArrayList<SpecialSymbol>();
     	
     	for (PlayAreaItem item : l_PlayAreaCorners) {    		
     		if (!item.isCovered()) {
+    			if (debugMode) {System.out.print("Il corner ( " + item.getCoordinates().getX() + " , "+ item.getCoordinates().getY() + " )");
+    							System.out.println("\tè di tipo: "+item.getCorner().getState()+" e contiene " + item.getCorner().getSymbol());
+    			}
     			if (item.getCorner().getState() == CornerState.SPECIALSYMBOL && (item.getCorner().getSymbol() instanceof SpecialSymbol)) {
     				l_SpecialSymbols.add((SpecialSymbol) item.getCorner().getSymbol());
     			}
@@ -205,7 +213,7 @@ public class PlayArea {
 		        
 		        // Controllo che l'angolo sul quale sto per piazzare l'angolo della carta che ho deciso di piazzare non sia NULL:		        
 		        if (cornerPlayArea.getPlayAreaItemCorner().getState() == CornerState.NULL) {
-		        	System.out.println("CornerPositions incompatibili a causa del null sulla playarea");
+		        	if (debugMode) {System.out.println("CornerPositions incompatibili a causa del null sulla playarea");}
 		        	coordinatesAreViable = false;
 		        	break;
 		        }		        		        
@@ -232,7 +240,7 @@ public class PlayArea {
 	        }
     	}
       	   	
-    	// Inizializzo l'oggetto e BAM
+    	// Inizializzo il PlayAreaItem e BAM
     	PlayAreaItem playAreaObject;    	
     	playAreaObject = new PlayAreaItem(coordinates, corner, card);    	
         l_PlayAreaCorners.add(playAreaObject);
@@ -314,7 +322,7 @@ public class PlayArea {
         private CornerPosition cornertype;
         private boolean covered;
         private Card card;
-        private String simboloGenerale; // Include tutti i possibili singoli che possono essere presenti in un corner
+        private String simboloGenerale; // Include tutti i possibili simboli che possono essere presenti in un corner
 
         // Costruttore per PlayAreaItem che accetta l'oggetto Coordinates
         public PlayAreaItem(Coordinates coordinates, Corner corner, Card card) {

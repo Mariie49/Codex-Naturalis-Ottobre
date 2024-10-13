@@ -6,8 +6,14 @@ import cards.*;
 
 public class GoldCardBackInsect extends GoldCard {
 	
-	private boolean isPlaced = false;
-	private static int points = 0;
+	private boolean isPlaced = false;	
+	private Object[][] pointsAssignment = {
+		    { 0 , "niente"},
+		    { 0 , "QUILL"},
+		    { 0 , "MANUSCRIPT"},
+		    { 0 , "INKWELL"},
+		    { 0 , "coveredCards"}			
+	};
 	private static boolean isFront = false;
 	private boolean hasCentralSymbol = true;
 	private static int number = 44;
@@ -38,14 +44,6 @@ public class GoldCardBackInsect extends GoldCard {
 	public boolean isPlaced() {
 		return isPlaced;
 	}
-
-	/**
-	 * @return the points
-	 */
-	public int getPoints() {
-		return points;
-	}
-
 	/**
 	 * @return the isFront
 	 */
@@ -70,16 +68,21 @@ public class GoldCardBackInsect extends GoldCard {
 	public boolean hasCentralSymbol() {
 		return hasCentralSymbol;
 	}
-	@Override
-	public Symbol getCentralSymbol() {
-		return kingdom;
-	}
+
 
 	/**
 	 * @param isPlaced the isPlaced to set
 	 */
 	public void setPlaced(boolean isPlaced) {
 		this.isPlaced = isPlaced;
+	}
+
+	public Object[][] getPointsAssignment() {
+		return pointsAssignment;
+	}
+
+	public void setPointsAssignment(Object[][] pointsAssignment) {
+		this.pointsAssignment = pointsAssignment;
 	}
 
 }

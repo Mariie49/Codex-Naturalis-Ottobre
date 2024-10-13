@@ -22,11 +22,11 @@ public enum SpecialSymbol {
 	 public String getAbbreviation() {
 	        switch (this) {
 	            case INKWELL:
-	                return "I_O";
+	                return "INK";
 	            case MANUSCRIPT:
-	                return "M_O";
+	                return "MAN";
 	            case QUILL:
-	                return "Q_O";
+	                return "QUI";
 	            default:
 	                return name().charAt(0) + "_O"; 
 	        }

@@ -18,6 +18,7 @@ public class ResourceCardBackFungi extends ResourceCard {
 	};
 	private static boolean isFront= false;
 	private static int number= 42;
+	private boolean hasCentralSymbol = true;
 	private static Symbol symbol = Symbol.FUNGI_KINGDOM;
 	//private ArrayList <Corner> corners = new ArrayList <Corner>;
 	private Corner corner2 = new Corner (CornerPosition.TOP_RIGHT, CornerState.EMPTY, null);
@@ -71,13 +72,10 @@ public class ResourceCardBackFungi extends ResourceCard {
 	public int getResourceCardNumber() {
 		return ResourceCardBackFungi.number;
 	}
+
 	@Override
-	public Symbol getCentralSymbol() {
-		return symbol;
+	public boolean hasCentralSymbol() {
+		return hasCentralSymbol;
 	}
-	
-	
-
-
 
 }

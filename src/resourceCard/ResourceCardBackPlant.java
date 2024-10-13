@@ -17,6 +17,7 @@ public class ResourceCardBackPlant extends ResourceCard {
 	};
 	private static boolean isFront= false;
 	private static int number= 41;
+	private boolean hasCentralSymbol = true;
 	private static Symbol symbol = Symbol.PLANT_KINGDOM;
 	//private ArrayList <Corner> corners = new ArrayList <Corner>;
 	private Corner corner2 = new Corner (CornerPosition.TOP_RIGHT, CornerState.EMPTY, null);
@@ -70,7 +71,7 @@ public class ResourceCardBackPlant extends ResourceCard {
 		return ResourceCardBackPlant.number;
 	}
 	@Override
-	public Symbol getCentralSymbol() {
-		return symbol;
+	public boolean hasCentralSymbol() {
+		return hasCentralSymbol;
 	}
 }

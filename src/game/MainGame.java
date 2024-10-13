@@ -7,47 +7,70 @@ import java.util.ArrayList;
 // Definisco la classe main game, e fin qui...
 public class MainGame {
 
-	/* Questa definisce il metodo "main", che è il punto di ingresso del programma
+	/* Questa definisce il metodo "main", che ï¿½ il punto di ingresso del programma
 	
-	public: il metodo main può essere chiamato in qualsiasi parte del programma
+	public: il metodo main puï¿½ essere chiamato in qualsiasi parte del programma
 	static: il metodo appartiene alla classe, e non ad una sua specifica istanza
 		classe:
 		istanza:
-	void: è l'output del metodo in caso di return. Non restituisce nulla
+	void: ï¿½ l'output del metodo in caso di return. Non restituisce nulla
 	String[] args: parametro che permette di passare argomenti da linea di comando
-		anche se non viene usato è obbligatorio, in sto caso non gli passo nulla.
+		anche se non viene usato ï¿½ obbligatorio, in sto caso non gli passo nulla.
 	*/
 	public static void main(String[] args) {
 		// Creo la nuova istanza del gioco "Game"
-		Game match = new Game();
+		final int pointsToEnd = 3;
 		
-		// Dichiaro una lista di giocatori. Ricordo che la lista è espandibile
+		Game match = new Game();
+		match.setPointsToEnd(pointsToEnd);
+		
+		// Dichiaro una lista di giocatori. Ricordo che la lista ï¿½ espandibile
         ArrayList<Player> players;
         
         // Booleano per gioco non terminato
-        boolean gameNotEnded = true;
-        // chiamo il metodo "startGame" dell'oggetto match che è la mia istanza
+        boolean lastRound = false;
+        boolean gameEnded = false;
+        // chiamo il metodo "startGame" dell'oggetto match che ï¿½ la mia istanza
         // dell'oggetto "Game"
         match.startGame();
         
 
         players = match.getPlayerList();
 
-        do {
-            for (Player currentPlayer : players) {
-                if (match.turn(currentPlayer)) {
-                    gameNotEnded = false;
-
-                }
+        do { // fai questo ciclo finchÃ¨ il gioco non Ã¨ finito
+            for (Player currentPlayer : players) { // cicla sui giocatori
+            	if (!lastRound || !currentPlayer.isFirst()) { // Se non Ã¨ l'ultimo turno oppure Ã¨ l'ultimo turno e il giocatore non Ã¨ quello che ha iniziato
+            		
+            		match.turn(currentPlayer);
+            		lastRound = match.getLastRound(); // controllo il last round, perchÃ¨, se sono finiti entrambi i deck, viene settato a true in "Game"
+            		
+	            	if (currentPlayer.getPoints() >= pointsToEnd) { // Se il player ha superato i tot punti allora scatta l'ultimo turno
+	                	lastRound = true;
+	                	match.setLastRound(true);
+	                }	
+	            	
+            	} else {
+            		gameEnded = true;
+            		break;
+            	}
             }
-            
-        } while (gameNotEnded);
-        players = match.rankings();
-        for (Player currentPlayer : players) {
-            System.out.println("Il giocatore " + currentPlayer.getName() + " ha raggiunto un punteggio di  " + currentPlayer.totalPoints());
+        } while (!gameEnded);
+        
+        
+        for (Player player : players) {
+        	match.assignObjectiveCardPoints (player);
         }
         
-        System.out.println("Il vincitore " + players.get(0).getName() + " con un punteggio di  " + players.get(0).totalPoints());
+        match.determineWinner();
+        
+        // Punti assegnati dalle carte obiettivo e numero di carte obiettivo raggiunte.
+        
+        players = match.rankings();
+        for (Player currentPlayer : players) {
+            System.out.println("Il giocatore " + currentPlayer.getName() + " ha raggiunto un punteggio di  " + currentPlayer.getPoints());
+        }
+        
+        System.out.println("Il vincitore " + players.get(0).getName() + " con un punteggio di  " + players.get(0).getPoints());
     }
 }
 

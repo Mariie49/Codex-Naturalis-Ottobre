@@ -1,6 +1,8 @@
 package goldCard;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -21,7 +23,7 @@ public abstract class GoldCard extends Card {
 	private Corner corner2;
 	private Corner corner3;
 	private Corner corner4;
-	private static ArrayList<Integer> assignedGoldCards= new ArrayList<>();
+	private static ArrayList<Integer> goldCardsDeck= new ArrayList<>();
 	private Scanner scanner;
 	
 	public GoldCard () {
@@ -46,10 +48,28 @@ public abstract class GoldCard extends Card {
 		ArrayList<Symbol> requirements = new ArrayList<>();
 		return requirements;
 	}
+
 	
 	public static void resetGoldCards() {
-		assignedGoldCards =new ArrayList<>();
+		goldCardsDeck =new ArrayList<>();
+		boolean mazzoDiCartePersonalizzato = true; // Serve per scegliere, eventualmente, un mazzo di carte personalizzato
+		if (mazzoDiCartePersonalizzato) {
+			// Scegli le carte che vuoi che siano disponibili
+			goldCardsDeck.addAll(Arrays.asList(11,12,13,14,15));
+		}
+		else {
+			goldCardsDeck =new ArrayList<>();
+			for (int i=1; i<=40; i++) {
+				goldCardsDeck.add(i);
+			}	
+		}
 	}
+	
+	public static ArrayList<Integer> getGoldCardsDeck () {
+		return goldCardsDeck;
+	}
+	
+	
 
 
 	/**
@@ -118,14 +138,13 @@ public abstract class GoldCard extends Card {
 
 	public static GoldCard drawGoldCard() {
 		GoldCard card = null;
-		Random r = new Random();
-		int n = 0;
+		Random random = new Random();
+		if(goldCardsDeck.size()==0) {;return null;}
 		
-		do{
-		 n=r.nextInt(40) + 1 ;		 
-		}while(assignedGoldCards.contains(n));
+		int indiceCasuale = random.nextInt(goldCardsDeck.size()); // Posizione nella lista di carte disponibili
+		int n = goldCardsDeck.get(indiceCasuale); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
+		goldCardsDeck.remove(indiceCasuale);
 		
-		assignedGoldCards.add(n);
 		switch(n) {
 		case 1:
 			card=new GoldCard1();

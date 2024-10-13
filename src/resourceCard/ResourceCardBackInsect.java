@@ -17,6 +17,7 @@ public class ResourceCardBackInsect extends ResourceCard{
 	};
 	private static boolean isFront= false;
 	private static int number= 44;
+	private boolean hasCentralSymbol = true;
 	private static Symbol symbol = Symbol.PLANT_KINGDOM;
 	//private ArrayList <Corner> corners = new ArrayList <Corner>;
 	private Corner corner2 = new Corner (CornerPosition.TOP_RIGHT, CornerState.EMPTY, null);
@@ -71,10 +72,10 @@ public class ResourceCardBackInsect extends ResourceCard{
 		return ResourceCardBackInsect.number;
 	}
 	@Override
-	public Symbol getCentralSymbol() {
-		return symbol;
+	public boolean hasCentralSymbol() {
+		return hasCentralSymbol;
 	}
-	
+
 	
 
 }

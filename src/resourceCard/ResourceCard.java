@@ -27,7 +27,7 @@ public abstract class ResourceCard extends Card {
 	private Corner corner2;
 	private Corner corner3;
 	private Corner corner4;
-	private static ArrayList<Integer> assignedResourceCards=new ArrayList<>();
+	private static ArrayList<Integer> resourceCardsDeck=new ArrayList<>();
 	private boolean isPlaced = false; 
 	private static Symbol symbol; 
 	private Scanner scanner;
@@ -58,18 +58,22 @@ public abstract class ResourceCard extends Card {
 	}
 
 	public static void resetResourceCards() {
-		assignedResourceCards =new ArrayList<>();
+		resourceCardsDeck =new ArrayList<>();
 		boolean mazzoDiCartePersonalizzato = true;
 		if (mazzoDiCartePersonalizzato) {
 			// Scegli le carte che vuoi che siano disponibili
-			assignedResourceCards.addAll(Arrays.asList(11,12,13,14,15,16,17,18,19,20));
+			resourceCardsDeck.addAll(Arrays.asList(11,12,13,14,15));
 		}
 		else {
-			assignedResourceCards =new ArrayList<>();
+			resourceCardsDeck =new ArrayList<>();
 			for (int i=1; i<=40; i++) {
-				assignedResourceCards.add(i);
+				resourceCardsDeck.add(i);
 			}	
 		}
+	}
+	
+	public static ArrayList<Integer> getResourceCardsDeck () {
+		return resourceCardsDeck;
 	}
 	/**
 	 * metodo per assegnare una carta  casuale
@@ -78,10 +82,11 @@ public abstract class ResourceCard extends Card {
 	public static ResourceCard drawResourceCard() {
 		ResourceCard card = null;
 		Random random = new Random();
+		if(resourceCardsDeck.size()==0) {return null;}
 		
-		int indiceCasuale = random.nextInt(assignedResourceCards.size());
-		int n = assignedResourceCards.get(indiceCasuale);
-		assignedResourceCards.remove(indiceCasuale);
+		int indiceCasuale = random.nextInt(resourceCardsDeck.size()); // Posizione nella lista di carte disponibili
+		int n = resourceCardsDeck.get(indiceCasuale); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
+		resourceCardsDeck.remove(indiceCasuale);
 		
 		switch(n) {
 		case 1:
@@ -164,6 +169,7 @@ public abstract class ResourceCard extends Card {
 			break;
 		case 27:
 			card=new ResourceCard27();
+			break;
 		case 28:
 			card=new ResourceCard28();
 			break;
@@ -214,7 +220,9 @@ public abstract class ResourceCard extends Card {
 			break;
 		case 44:
 			card=new ResourceCardBackInsect();
-			break;		
+			break;
+		default:
+			break;
 		}
 		return card;
 	}

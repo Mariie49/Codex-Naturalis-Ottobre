@@ -14,7 +14,7 @@ public class ObjectiveCard extends Card {
 	private ArrayList<Symbol> symbolRequirement;
 	private ArrayList<SpecialSymbol> specialSymbolRequirement;
 	private Object[][] positionRequirement;
-	private int pointsPerRequirement = 999;
+	private int pointsPerRequirement = 999;//per il debug
 	
 	
 	// Metodo importantissimo che calcola i punti in base alla PlayArea;
@@ -192,14 +192,15 @@ public class ObjectiveCard extends Card {
 				System.out.println(this.getSpecialSymbolRequirement());
 			break;
 			case POSITION_REQUIREMENT:
-				// Questo è tosto, devo creare una griglia 3x3 per stampare tutto e poi mettere dentro i kingdom corrispondenti
+				int n=4;
+				// Questo è tosto, devo creare una griglia nxn per stampare tutto e poi mettere dentro i kingdom corrispondenti
 				
-			    // Creazione della griglia vuota 3x3 (son tutte stringhe)
-			    String[][] grid = new String[3][3];
+			    // Creazione della griglia vuota nxn (son tutte stringhe)
+			    String[][] grid = new String[n][n];
 			    
 			    // Inizializzo tutto con 3 spazi, che è la lunghezza degli abbreviated kingdoms
-			    for (int j = 0; j < 3; j++) {
-			        for (int i = 0; i < 3; i++) {
+			    for (int j = 0; j < n; j++) {
+			        for (int i = 0; i < n; i++) {
 			            grid[j][i] = "   ";  // j corrisponde a y (-y a dire il vero) e i corrisponde a x
 			        }
 			    }
@@ -227,8 +228,8 @@ public class ObjectiveCard extends Card {
 			        int y = coord.getY() - minY;
 			        
 			        // Devo invertire y (che deve andare dal basso verso l'alto), mi trovo e controllo che la griglia sia 3x3
-			        if (x >= 0 && x < 3 && y >= 0 && y < 3) {
-			            grid[2 - y][x] = abbreviatedSymbol; // 2 - y per invertire l'asse Y
+			        if (x >= 0 && x < n && y >= 0 && y < n) {
+			            grid[(n - 1) - y][x] = abbreviatedSymbol; // (n-1) - y per invertire l'asse Y
 			        } else {
 			            System.err.println("Coordinate fuori dalla griglia: (" + coord.getX() + ", " + coord.getY() + ") carta: " + this.getNumber());
 			        }
@@ -236,8 +237,8 @@ public class ObjectiveCard extends Card {
 
 			    // Stampa della griglia
 			    System.out.println();
-			    for (int j = 0; j < 3; j++) {
-			        for (int i = 0; i < 3; i++) {
+			    for (int j = 0; j < n; j++) {
+			        for (int i = 0; i < n; i++) {
 			            System.out.print(grid[j][i] + " ");
 			        }
 			        System.out.println(); // A capo dopo ogni riga
@@ -296,7 +297,7 @@ public class ObjectiveCard extends Card {
                 this.setPositionRequirement(new Object[][] {
                     {new Coordinates(0, 0), Symbol.PLANT_KINGDOM},
                     {new Coordinates(-1, 1), Symbol.FUNGI_KINGDOM},
-                    {new Coordinates(1, 2), Symbol.FUNGI_KINGDOM}
+                    {new Coordinates(-1, 3), Symbol.FUNGI_KINGDOM}
                 });
                 break;
             case 6:
@@ -305,7 +306,7 @@ public class ObjectiveCard extends Card {
                 this.setPositionRequirement(new Object[][] {
                     {new Coordinates(0, 0), Symbol.PLANT_KINGDOM},
                     {new Coordinates(1, 1), Symbol.PLANT_KINGDOM},
-                    {new Coordinates(1, 2), Symbol.INSECT_KINGDOM}
+                    {new Coordinates(1, 3), Symbol.INSECT_KINGDOM}
                 });
                 break;
             case 7:
@@ -313,8 +314,8 @@ public class ObjectiveCard extends Card {
                 this.setRequirementType(RequirementType.POSITION_REQUIREMENT);
                 this.setPositionRequirement(new Object[][] {
                     {new Coordinates(0, 0), Symbol.ANIMAL_KINGDOM},
-                    {new Coordinates(0, 1), Symbol.ANIMAL_KINGDOM},
-                    {new Coordinates(1, 2), Symbol.FUNGI_KINGDOM}
+                    {new Coordinates(0, 2), Symbol.ANIMAL_KINGDOM},
+                    {new Coordinates(1, 3), Symbol.FUNGI_KINGDOM}
                 });
                 break;
             case 8:
@@ -322,8 +323,8 @@ public class ObjectiveCard extends Card {
                 this.setRequirementType(RequirementType.POSITION_REQUIREMENT);
                 this.setPositionRequirement(new Object[][] {
                     {new Coordinates(0, 0), Symbol.INSECT_KINGDOM},
-                    {new Coordinates(0, 1), Symbol.INSECT_KINGDOM},
-                    {new Coordinates(-1, 2), Symbol.ANIMAL_KINGDOM}
+                    {new Coordinates(0, 2), Symbol.INSECT_KINGDOM},
+                    {new Coordinates(-1, 3), Symbol.ANIMAL_KINGDOM}
                 });
                 break;
             case 9:
@@ -399,8 +400,12 @@ public class ObjectiveCard extends Card {
 	            }
 	        }        
 	        // Se tutti gli elementi di lista1 sono stati trovati, aumenta il counter
-	        nListe1InLista2++;
+	        if (bContenuta) {
+	        	 nListe1InLista2++;
+	        }
+	       
         }
+        
         return nListe1InLista2;
     }
     
