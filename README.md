@@ -25,12 +25,22 @@ Come giocare
 2.	Svolgimento dei turni: Ad ogni turno, il giocatore dovrà scegliere una carta dalla propria mano o dalle carte visibili sul tavolo, e posizionarla sul proprio manoscritto rispettando le regole di piazzamento diagonale. Successivamente, dovrà pescare una nuova carta per rimpiazzare quella giocata.
 3.	Fine del gioco: La partita termina quando un giocatore raggiunge 20 punti o quando le carte disponibili si esauriscono. A questo punto, si completa il giro di gioco, garantendo a tutti i giocatori di giocare lo stesso numero di turni. Il gioco calcola i punteggi finali e dichiara il vincitore.
 Struttura del progetto
+
+
 •	game: Contiene la classe principale Game che gestisce la logica del gioco, i turni, i punteggi e la visualizzazione.
 
 •	cards: Contiene le classi necessarie a rappresentare le carte (risorsa, oro, obiettivo).
+
+
 •	initialCard: Contiene la classe che rappresenta la carta iniziale del manoscritto.
+
+
 •	objectivecards: Contiene le classi che rappresentano le carte obiettivo.
+
+
 •	resourceCard: Contiene le classi che rappresentano le carte risorsa.
+
+
 •	goldCard: Contiene le classi che rappresentano le carte oro.
 
 Note aggiuntive
