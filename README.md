@@ -1,9 +1,10 @@
 Questo progetto è un'implementazione in Java del gioco da tavolo Codex Naturalis. 
 
+
 Caratteristiche
-•	Regole di Codex Naturalis: Il gioco simula le regole ufficiali di Codex Naturalis, incluse le diverse tipologie di (risorsa, oro, obiettivo), i requisiti di piazzamento e il sistema di punteggio basato su obiettivi.
+•	Regole di Codex Naturalis: Il gioco simula le regole ufficiali di Codex Naturalis, incluse le diverse tipologie di (risorsa, oro, iniziali, obiettivo), i requisiti di piazzamento e il sistema di punteggio basato su obiettivi.
 •	Interfaccia a linea di comando: L'interazione con il gioco avviene tramite un'intuitiva interfaccia a linea di comando, che guida i giocatori attraverso le scelte e le azioni disponibili.
-•	Gestione dei turni e fine partita: Il gioco gestisce automaticamente i turni dei giocatori, assicurando che tutti abbiano la stessa opportunità di completare il proprio manoscritto. La partita termina quando un giocatore raggiunge 20 punti o quando le carte a disposizione si esauriscono, garantendo un ultimo round a tutti i giocatori.
+•	Gestione dei turni e fine partita: Il gioco gestisce automaticamente i turni dei giocatori, assicurando che tutti abbiano la stessa opportunità di completare il proprio manoscritto (Area di gioco). La partita termina quando un giocatore raggiunge 20 punti o quando le carte a disposizione si esauriscono, garantendo un ultimo round a tutti i giocatori.
 •	Visualizzazione del manoscritto: Il gioco offre una chiara visualizzazione del manoscritto di ciascun giocatore all'inizio e alla fine di ogni turno, permettendo di pianificare le mosse e valutare l'avanzamento degli avversari.
 •	Calcolo dei punteggi e determinazione del vincitore: Al termine della partita, il gioco calcola automaticamente i punteggi finali dei giocatori, tenendo conto degli obiettivi completati e delle risorse accumulate, e dichiara il vincitore.
 
@@ -16,9 +17,10 @@ Come eseguire il gioco
 Come giocare
 1.	Avvio del gioco: All'avvio, il gioco chiederà il numero di giocatori (da 2 a 4) e i loro nomi.
 2.	Svolgimento dei turni: Ad ogni turno, il giocatore dovrà scegliere una carta dalla propria mano o dalle carte visibili sul tavolo, e posizionarla sul proprio manoscritto rispettando le regole di piazzamento diagonale. Successivamente, dovrà pescare una nuova carta per rimpiazzare quella giocata.
-3.	Fine del gioco: La partita termina quando un giocatore raggiunge 20 punti o quando le carte disponibili si esauriscono. A questo punto, il gioco calcola i punteggi finali e dichiara il vincitore.
+3.	Fine del gioco: La partita termina quando un giocatore raggiunge 20 punti o quando le carte disponibili si esauriscono. A questo punto, si completa il giro di gioco, garantendo a tutti i giocatori di giocare lo stesso numero di turni. Il gioco calcola i punteggi finali e dichiara il vincitore.
 Struttura del progetto
 •	game: Contiene la classe principale Game che gestisce la logica del gioco, i turni, i punteggi e la visualizzazione.
+
 •	cards: Contiene le classi necessarie a rappresentare le carte (risorsa, oro, obiettivo).
 •	initialCard: Contiene la classe che rappresenta la carta iniziale del manoscritto.
 •	objectivecards: Contiene le classi che rappresentano le carte obiettivo.
