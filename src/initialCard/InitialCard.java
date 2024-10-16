@@ -10,7 +10,9 @@ import cards.Corner;
 import cards.CornerPosition;
 import cards.SpecialSymbol;
 import cards.Symbol;
-
+/**
+ * La classe astratta InitialCard rappresenta una carta iniziale 
+ */
 public abstract class InitialCard extends Card {
 
 	private CardType type = CardType.STARTING; // Tipo di carta
@@ -27,11 +29,19 @@ public abstract class InitialCard extends Card {
 	private final Scanner scanner = new Scanner(System.in);
 	public InitialCard () {}
 
+	/**
+	 * Restituisce il numero della carta.
+	 * @return il numero della carta.
+	 */
 	@Override
 	public int getNumber() {
 		return this.number;
 	}
-	
+
+	/**
+	 * Aggiunge i quattro angoli della carta.
+	 * @return lista contenente i quattro angoli.
+	 */
 	@Override
 	public ArrayList <Corner> addCorners (){
 		ArrayList <Corner> corners = new ArrayList<>();
@@ -44,20 +54,26 @@ public abstract class InitialCard extends Card {
 		}
 		return corners;
 	}
+	/**
+	 * Aggiunge i simboli centrali della carta.
+	 * @return lista contenente i simboli centrali.
+	 */
 	@Override
 	public ArrayList <Symbol> addCentralSymbol (){
 		ArrayList <Symbol> centralSymbol = new ArrayList<>();
 		centralSymbol.add(symbolA);
 		return centralSymbol;
 	}
-
+	/**
+	 * Resetta il mazzo di carte iniziali.
+	 */
 	public static void resetInirialCards() {
 		assignedInitialCards =new ArrayList<>();
 	}
 
 
 	/**
-	 * metodo per assegnare una carta  casuale
+	 * metodo per assegnare una carta casuale
 	 * @return carta iniziale
 	 */
 	public static InitialCard drawInitialCard() {
@@ -112,30 +128,54 @@ public abstract class InitialCard extends Card {
 		return card;
 	}
 
+	/**
+	 * Restituisce il tipo di carta.
+	 * @return il tipo della carta.
+	 */
 	public CardType getType() {
 		return type;
 	}
 
 	public Object[][] getPointsAssignment(){
 		return null;		
-	};
+	}
+	/**
+	 * Restituisce lo stato di piazzamento della carta.
+	 * @return true se la carta è piazzata, altrimenti false.
+	 */
 	@Override
 	public boolean isPlaced() {
 		return isPlaced;
 	}
+	/**
+	 * Imposta lo stato di collocazione della carta.
+	 * @param isPlaced true se la carta è collocata, altrimenti false.
+	 */
 	@Override
 	public void setPlaced(boolean isPlaced) {
 		this.isPlaced = isPlaced;
 	}
 
-
+	/**
+	 * Restituisce se la carta è girata sul fronte.
+	 * @return true se la carta è sul fronte, altrimenti false.
+	 */
 	public boolean isFront() {
 		return isFront;
 	}
+	/**
+	 * Restituisce se la carta ha un simbolo centrale.
+	 * @return true se la carta ha un simbolo centrale, altrimenti false.
+	 */
 	@Override
 	public boolean hasCentralSymbol() {
 		return hasCentralSymbol;
 	}
+
+	/**
+	 * Restituisce il simbolo centrale della carta.
+	 * @return il simbolo centrale della carta.
+	 */
 	@Override
 	public Symbol getCentralSymbol() {
 		return symbolA;
@@ -148,8 +188,7 @@ public abstract class InitialCard extends Card {
 	                    return "NUL";
 	                case EMPTY:
 	                    return "EMP";
-	                case HIDDEN:
-	                    return "HID";
+	                
 	                case SYMBOL:
 	                	if (corner.getSymbol() instanceof Symbol) {
 	                        Symbol symbol = (Symbol) corner.getSymbol();
@@ -173,41 +212,7 @@ public abstract class InitialCard extends Card {
 	    }
 	    return "  "; // Angolo non trovato (non dovrebbe accadere)
 	}
-	@Override
-	public void printCardInCell() {
-		if(this.isFront()) {
 	
-			System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "  "+
-					getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-			System.out.println();
-			if(this.hasCentralSymbol()) {
-				for(Symbol s: addCentralSymbol())
-					System.out.println("  " + s.getAbbreviation() + "   ");
-			}
-			else {
-				System.out.println();
-			}
-
-			System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT) + "  "+
-					getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT));	
-		}
-		else {
-			System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "  "+
-					getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-			System.out.println();
-			if(this.hasCentralSymbol()) {
-				for(Symbol s: addCentralSymbol())
-					System.out.print("  " + s.getAbbreviation() + "   ");
-			}
-			else {
-				System.out.println();
-			}
-
-			System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT) + "  "+
-					getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT));	
-
-		}
-	}
 
 	public String getCornerRepresentation(CornerPosition position) {
 		for (Corner corner : addCorners()) {
@@ -241,8 +246,7 @@ public abstract class InitialCard extends Card {
 					return corner.getSymbol().toString();
 				case SPECIALSYMBOL:
 					return corner.getSymbol().toString();
-				case HIDDEN:
-					return "HIDDEN";
+				
 				default:
 					return "?";
 				}
@@ -251,11 +255,7 @@ public abstract class InitialCard extends Card {
 		return "  "; // Angolo non trovato (non dovrebbe accadere)
 	}
 	/**
-	 * Prints the details of the card.
-	 * 
-	 * This method displays the card's type, the side (front or back),
-	 * the corner symbols and Central symbols (if present) of that side, and the card's score.
-	 * If the card has no Central symbols, a blank line is printed to maintain consistent card height.
+	 * Stampa i dettagli della carta, inclusi gli angoli e il simbolo centrale se presente.
 	 */
 	@Override
 	public void printCard() {		
@@ -284,9 +284,9 @@ public abstract class InitialCard extends Card {
 		}
 	}
 	/**
-	 * This method displays a menu asking the user to select the front (1) or back (2) side.
-	 * It reads the user's input and sets the isFront property of the card accordingly.
-	 * If the user enters an invalid choice, it defaults to the front side.
+	 * Metodo che consente di scegliere il lato della carta da visualizzare (fronte o retro).
+	 * @param inputCarta la carta per cui scegliere il lato.
+	 * @return la carta con il lato selezionato.
 	 */
 	@Override
 	public Card ChooseSide(Card inputCarta) {

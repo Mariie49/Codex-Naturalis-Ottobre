@@ -27,10 +27,10 @@ import java.util.ArrayList;
 
 import java.util.Scanner;
 import java.util.Collections;
-import goldCard.*;
+
 import initialCard.*;
 //import ObjectiveCard;
-import resourceCard.*;
+
 import cards.Card;
 import cards.CornerPosition;
 import cards.SpecialSymbol;
@@ -39,7 +39,19 @@ import cards.SpecialSymbol;
 import cards.Corner;
 import cards.Coordinates;
 
-
+/**
+ * La classe Player rappresenta un giocatore in un gioco. 
+ * Gestisce le azioni che il giocatore può compiere come scegliere una carta, 
+ * piazzare una carta nella PlayArea, ottenere punti e altre funzionalità correlate.
+ * 
+ * Contiene metodi per:
+ * - Scegliere una carta dalla mano
+ * - Piazzare una carta nella PlayArea
+ * - Gestire i punti e le carte obiettivo
+ * - Interagire con le carte visibili sul tavolo
+ * - Aggiungere e rimuovere carte dalla mano del giocatore
+ 
+ */
 public class Player {
 
 	private String name;
@@ -52,7 +64,13 @@ public class Player {
 	private Card playerObjectiveCard;
 	private Scanner scanner;
 
-
+	/**
+     * Costruttore della classe Player.
+     * 
+     * @param id   Identificativo unico del giocatore
+     * @param name Nome del giocatore
+     */
+	
 	public Player(int id, String name) {
 		this.id = id;
 		this.playerPlayArea = new PlayArea();
@@ -64,7 +82,14 @@ public class Player {
 		//this.handGoldCard = new ArrayList <GoldCard> ();
 		//this.commonObj = CommonObjectiveCard.assignCommonObjectiveCard();
 	}
-	
+	/**
+     * Calcola i punti guadagnati da una carta piazzata sulla PlayArea.
+     * 
+     * @param playedCard La carta giocata
+     * @param placedCorner La posizione dell'angolo della carta
+     * @param placingCoordinates Le coordinate in cui la carta è piazzata
+     * @return I punti guadagnati
+     */
 	public int n_PlacedCardPoints(Card playedCard, CornerPosition placedCorner, Coordinates placingCoordinates) {
 	    // Leggo i pointsAssignment che contengono le informazioni sui punti da assegnare, e poi
 		// a seconda del caso (della "regola di assegnamento") assegno i punti corrispondenti
@@ -139,12 +164,19 @@ public class Player {
 		return pointsValue;
 		//System.out.println("PUNTI DEL GIOCATORE "+getName()+":\t"+points);
 	}
-	
-	public Coordinates choosePositionOnPlayArea (Card card, CornerPosition cornerpos,ArrayList<Coordinates> step1_viableCoordinates) {		
+	/**
+     * Consente al giocatore di scegliere una posizione valida sulla PlayArea per piazzare una carta.
+     * 
+     * @param card   La carta da piazzare
+     * @param cornerpos  La posizione dell'angolo che verrà attaccato
+     * @param validCoordinates Una lista di coordinate valide per il posizionamento
+     * @return Le coordinate scelte per piazzare la carta
+     */
+	public Coordinates choosePositionOnPlayArea (Card card, CornerPosition cornerpos,ArrayList<Coordinates> validCoordinates) {		
 		Coordinates chosenCoordinates = new Coordinates(999,999);
 		
 		// 1) ------------- Individuazione delle coordinate appropriate. -------------
-		//ArrayList<Coordinates> step1_viableCoordinates = playerPlayArea.validPlacementsForGivenCorner(card, cornerpos);
+		//ArrayList<Coordinates> validCoordinates = playerPlayArea.validPlacementsForGivenCorner(card, cornerpos);
 		
 		// 2) ------------- Stampo a schermo "quale di queste vuoi scegliere?" -------------
 		
@@ -152,8 +184,8 @@ public class Player {
 		boolean validChoice = false; // Flag per controllare la validità della scelta
 		while (!validChoice) {
 		    System.out.println("Scegli tra le seguenti coordinate:");
-		    for (int i = 0; i < step1_viableCoordinates.size(); i++) {
-		        System.out.println((i + 1) + ": " + step1_viableCoordinates.get(i));
+		    for (int i = 0; i < validCoordinates.size(); i++) {
+		        System.out.println((i + 1) + ": " + validCoordinates.get(i));
 		    }
 
 		    // Chiedi all'utente di inserire la scelta
@@ -163,8 +195,8 @@ public class Player {
 		        int choice = scanner.nextInt();
 
 		        // Validazione della scelta
-		        if (choice > 0 && choice <= step1_viableCoordinates.size()) {
-		            chosenCoordinates = step1_viableCoordinates.get(choice - 1); // Salva la scelta
+		        if (choice > 0 && choice <= validCoordinates.size()) {
+		            chosenCoordinates = validCoordinates.get(choice - 1); // Salva la scelta
 		            validChoice = true; // Imposta il flag a true per uscire dal ciclo
 		            System.out.println("Hai scelto le coordinate: " + chosenCoordinates);
 		        } else {
@@ -180,7 +212,13 @@ public class Player {
 		// 3) ------------- Output funzione -------------
 		return chosenCoordinates;
 	}
-	
+	 /**
+     * Aggiunge una carta alla PlayArea del giocatore.
+     * 
+     * @param card       La carta da aggiungere
+     * @param cornerpos  La posizione dell'angolo della carta che viene attaccato
+     * @param coords     Le coordinate in cui piazzare la carta
+     */
 	// Metodo che aggiunge una carta alla PlayArea. Dobbiamo scegliere carta, angolo che vogliamo attaccare e posizione sul dove attaccarlo
     public void addCardToPlayArea (Card card, CornerPosition cornerpos, Coordinates coords) {
     	int x_carta; int y_carta;
@@ -198,56 +236,69 @@ public class Player {
     	}    	
     }
 
-	/**
-	 * @return player's Id
-	 */
+    /**
+     * Restituisce l'ID del giocatore.
+     * 
+     * @return L'ID del giocatore
+     */
 	public int getId() {
 		return this.id;
 	}
 
-	
+	 /**
+     * Restituisce la PlayArea del giocatore.
+     * 
+     * @return La PlayArea del giocatore
+     */
 	public PlayArea getPlayArea() {
 		return playerPlayArea;
 	}
-
+	/**
+     * Imposta la PlayArea del giocatore.
+     * 
+     * @param playArea La PlayArea da assegnare al giocatore
+     */
 	public void setPlayArea(PlayArea playArea) {
 		playerPlayArea = playArea;
 		System.out.println("Settato il manoscritto del giocatore " + id + ", chiamato " + name);
 	}
 	
 	/**
-	 * @return player's name
-	 */
+     * Restituisce il nome del giocatore.
+     * 
+     * @return Il nome del giocatore
+     */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
-	 * @param isFirst
-	 */
+     * Imposta se il giocatore è il primo a giocare.
+     * 
+     * @param isFirst Indica se il giocatore è il primo
+     */
 	public void setIsFirst(boolean isFirst) {
 		this.isFirst = isFirst;
 	}
 	/**
-	 * @return if player is first
-	 */
+     * Verifica se il giocatore è il primo.
+     * 
+     * @return true se il giocatore è il primo, false altrimenti
+     */
 	public boolean isFirst() {
 		return isFirst;
 	}
 	/**
-	 * @return player's points
-	 */
+     * Restituisce i punti del giocatore.
+     * 
+     * @return I punti attuali del giocatore
+     */
 	public int getPoints() {
 		return points;
 	}
+	
 	/**
-	 * @param commonGoalPoints
-	 */
-	public void setPoints(int commonGoalPoints) {
-		this.points = commonGoalPoints;
-	}
-	/**
-	 * somma i punti inseriti ai punti che il giocatore ha
+	 * somma i punti inseriti ai punti che il giocatore possiede
 	 * @param points punti da sommare 
 	 */
 	public void addPoints(int points) {
@@ -264,6 +315,11 @@ public class Player {
 		return handGoldCard;
 	}
 	 */
+	/**
+     * Aggiunge una carta alla mano del giocatore.
+     * 
+     * @param card La carta da aggiungere alla mano
+     */
 	public void addCardToHand(Card card) {
 		hand.add(card);
 	}
@@ -336,11 +392,10 @@ public class Player {
 
 
 	/**
-	 * Permette al giocatore di scegliere una carta da giocare dalla propria mano.
-	 *
-	 * @param mano La mano di carte corrente del giocatore (ArrayList).
-	 * @return L'oggetto Carta scelto, o null se non � stata selezionata alcuna carta.
-	 */
+     * Permette al giocatore di scegliere una carta dalla mano.
+     * 
+     * @return La carta scelta dalla mano
+     */
 	public Card chooseCardToPlay() {
 	    int choice;
 	    Card chosenCard = null;
@@ -371,7 +426,11 @@ public class Player {
 
 	    return chosenCard; 
 	}
-
+	/**
+     * Permette al giocatore di scegliere una posizione (angolo) per attaccare una carta.
+     * 
+     * @return La posizione (CornerPosition) scelta
+     */
 	public CornerPosition choosePosition() {
 	    int choice = -1;
 
@@ -413,15 +472,11 @@ public class Player {
 
 
 	/**
-	 * Allows the player to choose a card to take from the visible cards.
-	 *
-	 * @param visibleCards The list of visible cards available.
-	 * 
-	 * @return The chosen Card object. If the player doesn't choose any of the visible 
-	 *         cards, a new resource or gold card (depending on their choice) is drawn
-	 *         and returned. Returns null only if the player enters invalid input for
-	 *         the card type.
-	 */
+     * Permette al giocatore di scegliere una carta da prendere tra quelle visibili.
+     * 
+     * @param visibleCards Una lista di carte visibili disponibili
+     * @return La carta scelta
+     */
 	public Card chooseCardToTake(ArrayList <Card> visibleCards) {
 		
 
@@ -515,8 +570,8 @@ public class Player {
 		return cardTaken;
 		*/
 	}
-
-	private boolean yesorNoInput(Scanner scanner) {
+	/*
+	 * private boolean yesorNoInput(Scanner scanner) {
 		String answer;
 		boolean choosen;
 		answer = scanner.next();
@@ -527,16 +582,24 @@ public class Player {
 		choosen = answer.startsWith("s") || answer.startsWith("S");
 		return choosen;
 	}
+	 */
+
 	
 	
 	/**
-	 * @return print player's Manuscript
-	 */
+     * Stampa la PlayArea del giocatore.
+     * 
+     * @return La rappresentazione in stringa della PlayArea del giocatore
+     */
 	public String printPlayArea() {
 		return playerPlayArea.toString();
 	}
 	
-	
+	/**
+     * Permette al giocatore di scegliere e piazzare una carta iniziale nella PlayArea.
+     * 
+     * @param initialCard La carta iniziale da piazzare
+     */
 	 public void chooseOrientationAndPlaceInitialCard(InitialCard initialCard) {
 		 
 		 InitialCard backInitialCard;
@@ -549,27 +612,53 @@ public class Player {
 		playerPlayArea.placeInitialCard(backInitialCard);
 	}
 	
+	 
+	 /**
+	     * Rimuove una carta dalla mano del giocatore.
+	     * 
+	     * @param card La carta da rimuovere
+	     */
 	 // Metodo per rimuovere una carta dalla mano del giocatore
 	public void removeCardFromHand(Card card) {
 		this.hand.remove(card);	
 	}
-	
+	/**
+     * Restituisce la mano del giocatore.
+     * 
+     * @return La mano del giocatore come lista di carte
+     */
 	public ArrayList <Card> getHand(){
 		return this.hand;
 	}
-	
+	/**
+     * Restituisce la carta obiettivo personale del giocatore.
+     * 
+     * @return La carta obiettivo del giocatore
+     */
 	public Card getPlayerObjectiveCard() {
 		return playerObjectiveCard;
 	}
-	
+	 /**
+     * Imposta la carta obiettivo personale del giocatore.
+     * 
+     * @param playerObjectiveCard La carta obiettivo da assegnare
+     */
 	public void setPlayerObjectiveCard(Card playerObjectiveCard) {
 		this.playerObjectiveCard = playerObjectiveCard;
 	}
-
+	/**
+     * Restituisce il numero di carte obiettivo raggiunte dal giocatore.
+     * 
+     * @return Il numero di carte obiettivo raggiunte
+     */
 	public int getAchievedObjectiveCards() {
 		return achievedObjectiveCards;
 	}
-
+	/**
+     * Somma al totale il numero di carte obiettivo raggiunte dal giocatore.
+     * 
+     * @param num Il numero di carte da aggiungere
+     */
 	public void addAchievedObjectiveCards(int num) {
 		this.achievedObjectiveCards =+ num;
 	}

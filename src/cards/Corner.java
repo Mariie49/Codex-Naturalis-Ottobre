@@ -1,5 +1,9 @@
 package cards;
 
+/**
+ * Rappresenta un angolo (Corner) di una carta, che può contenere un simbolo,
+ * essere coperto e avere uno stato specifico.
+ */
 public class Corner {
 
 	private CornerPosition position;
@@ -8,7 +12,19 @@ public class Corner {
 	private boolean isCovered = false; // Flag per indicare se l'angolo � coperto
 	
 
-	public Corner() {}
+	 /**
+     * Costruttore vuoto che crea un angolo senza impostare parametri iniziali.
+     */
+    public Corner() {}
+
+    /**
+     * Costruttore che inizializza l'angolo con una posizione, stato e simbolo specifici.
+     *
+     * @param position La posizione dell'angolo.
+     * @param state Lo stato dell'angolo.
+     * @param symbol Il simbolo associato all'angolo, può essere null a seconda dello stato.
+     * @throws IllegalArgumentException Se il simbolo non è valido per lo stato dato.
+     */
 
 	public Corner(CornerPosition position, CornerState state, Object symbol) {
 		if (state == CornerState.SYMBOL && !(symbol instanceof Symbol)) {
@@ -27,51 +43,85 @@ public class Corner {
 
 	}
 
-	public void setPosition(CornerPosition position) {
+	   /**
+     * Imposta la posizione dell'angolo.
+     * 
+     * @param position La nuova posizione da impostare.
+     */
+    public void setPosition(CornerPosition position) {
         this.position = position;
     }
-	
-	public CornerPosition getPosition() {
-        return position; // Restituisce direttamente la posizione
+
+    /**
+     * Restituisce la posizione dell'angolo.
+     *
+     * @return La posizione dell'angolo.
+     */
+    public CornerPosition getPosition() {
+        return position;
     }
 
 	/**
-	 * @return the state
-	 */
-	public CornerState getState() {
-		return state;
-	}
+     * Restituisce lo stato corrente dell'angolo.
+     *
+     * @return Lo stato dell'angolo.
+     */
+    public CornerState getState() {
+        return state;
+    }
 
 	/**
-	 * @return the symbol
-	 */
-	public Object getSymbol() {
-		return symbol;
-	} 
+     * Restituisce il simbolo associato all'angolo.
+     *
+     * @return Il simbolo dell'angolo, può essere null.
+     */
+    public Object getSymbol() {
+        return symbol;
+    }
 	
 
-	/**
-	 * @param state the state to set
-	 */
-	public void setState(CornerState state) {
-		this.state = state;
-	}
+    /**
+     * Imposta un nuovo stato per l'angolo.
+     *
+     * @param state Il nuovo stato da impostare.
+     */
+    public void setState(CornerState state) {
+        this.state = state;
+    }
 
 	/**
-	 * @param symbol the symbol to set
-	 */
-	public void setSymbol(Object symbol) {
-		this.symbol = symbol;
-	}
-	public boolean isCovered() {
+     * Imposta il simbolo associato all'angolo.
+     *
+     * @param symbol Il simbolo da associare all'angolo.
+     */
+    public void setSymbol(Object symbol) {
+        this.symbol = symbol;
+    }
+
+    /**
+     * Verifica se l'angolo è coperto.
+     *
+     * @return true se l'angolo è coperto, false altrimenti.
+     */
+    public boolean isCovered() {
         return isCovered;
     }
 
+    /**
+     * Imposta lo stato di copertura dell'angolo.
+     *
+     * @param covered true se l'angolo deve essere coperto, false altrimenti.
+     */
     public void setCovered(boolean covered) {
         isCovered = covered;
     }
 
-	@Override
+    /**
+     * Restituisce una rappresentazione testuale dell'angolo.
+     *
+     * @return Una stringa che descrive l'angolo con la sua posizione, stato e simbolo.
+     */
+    @Override
 	public String toString() {
 		return "Corner(position=" + position + ", state=" + state + ", symbol=" + symbol + ")";
 	}

@@ -3,15 +3,15 @@ package cards;
 import java.util.Random;
 
 /**
- * Enum representing the special symbols that a card can have.
+ * Enum che rappresenta i simboli speciali che una carta può avere.
  */
-// Enumerazione per i simboli speciali
 public enum SpecialSymbol {
-	INKWELL, MANUSCRIPT, QUILL;
-	/**
-     * Returns a random special symbol from the enum.
+    INKWELL, MANUSCRIPT, QUILL;
+
+    /**
+     * Restituisce un simbolo speciale casuale dall'enum.
      *
-     * @return a random special symbol
+     * @return un simbolo speciale casuale
      */
 	public static SpecialSymbol getRandomSpecialSymbol() {
         SpecialSymbol[] specialSymbols = SpecialSymbol.values();

@@ -51,7 +51,12 @@ import cards.Coordinates;
 import cards.Symbol;
 import goldCard.GoldCard;
 //import java.util.*;
-
+/**
+ * La classe PlayArea rappresenta l'area di gioco in cui vengono collocati elementi come simboli, carte, 
+ * angoli speciali e altri oggetti di gioco. Questa classe fornisce metodi per gestire, ordinare e verificare
+ * gli elementi posizionati nella PlayArea, incluse funzionalità come ordinamento, verifica dei requisiti di carte,
+ * ricerca di simboli e piazzamento di carte.
+ */
 public class PlayArea {
     
     private ArrayList<PlayAreaItem> l_PlayAreaCorners; //Contiene gli oggetti della PlayArea
@@ -65,12 +70,19 @@ public class PlayArea {
         l_PlayAreaCorners = new ArrayList<>(); // Inizializza la lista
     }
     
-    // getter della lista
+    /**
+     * Restituisce la lista di elementi della PlayArea.
+     * @return Un'ArrayList di PlayAreaItem che rappresenta tutti gli oggetti nella PlayArea.
+     */
     public ArrayList<PlayAreaItem> getPlayArea() {
         return l_PlayAreaCorners;
     }
-    
-    // getter della lista ORDINATA, parte dagli elementi più in alto a sinistra a quelli più in basso a destra dando precedenza alla Y
+    /**
+     * Restituisce la lista di elementi della PlayArea ordinati per coordinate.
+     * 
+     * @return Un'ArrayList ordinata di PlayAreaItem.
+     */
+    // get della lista ORDINATA, parte dagli elementi più in alto a sinistra a quelli più in basso a destra dando precedenza alla Y
     public ArrayList<PlayAreaItem> getSortedPlayArea() {
     	// NB: Creo una "Shallow copy" di PlayArea, quindi PlayArea resta invariata se modifico l_SortedPlayAreaCorners
     	// MA se modifico GLI ELEMENTI di l_SortedPlayAreaCorners anche gli elementi di PlayArea saranno modificati!
@@ -99,7 +111,12 @@ public class PlayArea {
         }    	
         return l_SortedPlayAreaCorners;
     }
-      
+    /**
+     * Verifica i requisiti delle carte d'oro presenti nella PlayArea confrontandoli con i simboli presenti.
+     * 
+     * @param card La carta d'oro di cui si vogliono verificare i requisiti.
+     * @return True se i requisiti sono soddisfatti, False altrimenti.
+     */
     
     // Verifica i requirements delle golden cards
     public boolean verifyGoldCardRequirements (GoldCard card) {
@@ -110,7 +127,11 @@ public class PlayArea {
     		return false;
     	}
     }
-    
+    /**
+     * Restituisce le coordinate degli oggetti presenti nella PlayArea.
+     * 
+     * @return Un'ArrayList di Coordinates che rappresenta tutte le coordinate occupate.
+     */
     public ArrayList<Coordinates> getOccupiedCoordinates(){
     	ArrayList<Coordinates> occupiedCoordinates = new ArrayList<>();
     	for (PlayAreaItem ii : l_PlayAreaCorners) {
@@ -118,8 +139,14 @@ public class PlayArea {
     	}
     	return occupiedCoordinates;    	
     }
+    /**
+     * Restituisce la lista dei simboli presenti nella PlayArea.
+     * I simboli rappresentano i regni e vengono cercati tra i corner delle carte.
+     * 
+     * @return Un'ArrayList di Symbol presenti nella PlayArea.
+     */
     
-    // Metodo che fruga in tutta la PlayArea e cerca i Symbol (che sono solo gli animaletti)
+    // Metodo che fruga in tutta la PlayArea e cerca i Symbol 
     public ArrayList<Symbol> getSymbolList () { // 
     	
     	l_Symbols = new ArrayList<Symbol>();
@@ -150,6 +177,12 @@ public class PlayArea {
     	}    	
     	return l_Symbols;
     }
+    /**
+     * Restituisce la lista dei simboli speciali nella PlayArea.
+     * I simboli speciali includono oggetti come calamaio, piuma e manoscritto.
+     * 
+     * @return Un'ArrayList di SpecialSymbol presenti nella PlayArea.
+     */
     
     // Metodo che fruga in tutta la PlayArea e cerca i SpecialSymbol (che sono solo calamaio, piuma e manoscritto)
     // Gli SpecialSymbols sono solo sui corners delle carte, mai al centro
@@ -170,7 +203,13 @@ public class PlayArea {
 
     	return l_SpecialSymbols;
     }
-    
+    /**
+     * Determina le coordinate valide in cui un angolo di una carta può essere piazzato nella PlayArea.
+     * 
+     * @param card La carta che si desidera piazzare.
+     * @param givenCornerPosition La posizione dell'angolo della carta da piazzare.
+     * @return Un'ArrayList di Coordinates che rappresenta le posizioni valide.
+     */
     // Metodo per ottenere dove un dato corner può essere piazzato
     public ArrayList<Coordinates> validPlacementsForGivenCorner(Card card, CornerPosition givenCornerPosition) {
         ArrayList<Coordinates> viableCoordinates = new ArrayList<>();
@@ -226,7 +265,16 @@ public class PlayArea {
         }
         return viableCoordinates;
     }
-       
+    /**
+     * Aggiunge un corner alla PlayArea nelle coordinate specificate.
+     *
+     * @param coordinates Le coordinate in cui aggiungere il corner.
+     * @param corner Il corner da aggiungere.
+     * @param card La carta che contiene il corner.
+     * @return true se l'operazione è riuscita.
+     * @throws IllegalArgumentException se uno degli oggetti passati è null.
+     */ 
+    
     //Metodo per aggiungere una carta alla PlayArea:
     // Il metodo NON controlla che le coordinate siano valide!!!!
     public boolean placeCornerOnXYCoordinates (Coordinates coordinates ,Corner corner, Card card) {   	
@@ -246,7 +294,13 @@ public class PlayArea {
         l_PlayAreaCorners.add(playAreaObject);
         return true;
     }
-    
+    /**
+     * Ottiene l'elemento PlayAreaItem associato a specifiche coordinate.
+     * Se esiste un elemento non coperto nelle coordinate, viene restituito, altrimenti null.
+     *
+     * @param givenCoordinates Le coordinate dell'elemento da cercare.
+     * @return L'elemento PlayAreaItem corrispondente o null se non trovato.
+     */
     // Metodo per estrarre dalla lista l_PlayAreaCorners date le coordinate
     public PlayAreaItem getPlayAreaCorner(Coordinates givenCoordinates) {
         for (PlayAreaItem item : l_PlayAreaCorners) {
@@ -261,6 +315,12 @@ public class PlayArea {
         return null;  // Coordinate non trovate
     }
     
+    /**
+     * Aggiunge una carta iniziale alla PlayArea.
+     * Vengono posizionati i quattro corner della carta nelle coordinate di partenza (0,0), (0,1), (1,1), (1,0).
+     *
+     * @param card La carta iniziale da posizionare.
+     */
     
     // Metodo per aggiungere la carta iniziale
     public void placeInitialCard(InitialCard card) {
@@ -294,7 +354,10 @@ public class PlayArea {
         }
     }
 
-    
+    /**
+     * Stampa le informazioni di tutti gli elementi presenti nella PlayArea.
+     * Viene stampata una rappresentazione dettagliata di ogni PlayAreaItem e la lista dei simboli presenti.
+     */
     // Metodo per stampare tutte le informazioni della PlayArea
     public void printPlayArea() {
         for (PlayAreaItem item : getPlayArea()) {
@@ -306,6 +369,11 @@ public class PlayArea {
         System.out.println(getSpecialSymbolList());
     }
     
+    /**
+     * Stampa le informazioni della PlayArea ordinata.
+     * Gli elementi vengono ordinati prima di essere stampati, insieme ai simboli presenti e speciali.
+     */
+    
     public void printSortedPlayArea() {
         for (PlayAreaItem item : getSortedPlayArea()) {
             System.out.println(item.printPlayAreaItem());
@@ -314,7 +382,9 @@ public class PlayArea {
         System.out.println(getSymbolList());
         System.out.println("Simboli speciali nella PlayArea:");
         System.out.println(getSpecialSymbolList());}
-
+    /**
+     * Rappresenta un elemento della PlayArea, contenente informazioni sulle coordinate, il corner e la carta associata.
+     */
     // Classe interna per rappresentare un elemento nella PlayArea
     public class PlayAreaItem {
         private Coordinates coordinates;  // Sostituzione di x e y con l'oggetto Coordinates
@@ -323,7 +393,14 @@ public class PlayArea {
         private boolean covered;
         private Card card;
         private String simboloGenerale; // Include tutti i possibili simboli che possono essere presenti in un corner
-
+        /**
+         * Costruisce un nuovo PlayAreaItem.
+         *
+         * @param coordinates Le coordinate in cui si trova l'elemento.
+         * @param corner Il corner associato all'elemento.
+         * @param card La carta che contiene il corner.
+         * @throws IllegalArgumentException se il corner o la carta sono null.
+         */
         // Costruttore per PlayAreaItem che accetta l'oggetto Coordinates
         public PlayAreaItem(Coordinates coordinates, Corner corner, Card card) {
             if (corner == null || card == null) {
@@ -336,7 +413,11 @@ public class PlayArea {
             this.card = card;
             this.simboloGenerale = card.getAbbreviatedCorner(cornertype);
         }
-
+        /**
+         * Restituisce una rappresentazione stringa dettagliata dell'elemento della PlayArea.
+         *
+         * @return Una stringa contenente informazioni su coordinate, corner e stato dell'elemento.
+         */
 	    // metodo per una visualizzazione della PlayArea
 	    public String printPlayAreaItem() {
 	        return 	"PAI Coord: " + coordinates + ", " +
@@ -345,27 +426,52 @@ public class PlayArea {
 	        		"CorState: " + simboloGenerale + ", " +
 	        		"Card: " + card.getNumber();
 	    }
-	    
+	    /**
+	     * Restituisce la posizione del corner.
+	     *
+	     * @return La posizione del corner (es. TOP_LEFT, BOTTOM_RIGHT).
+	     */
 	    public CornerPosition getCornerPosition() {
 	    	return this.cornertype;
 	    }
+	    /**
+	     * Restituisce le coordinate nella PlayArea.
+	     *
+	     * @return Le coordinate 
+	     */
 	    
 	    public Coordinates getCoordinates() {
 	    	return this.coordinates;
 	    }
-	    
+	    /**
+	     * Verifica se il corner è coperto da un altro elemento.
+	     *
+	     * @return true se l'elemento è coperto, false altrimenti.
+	     */
 	    public boolean isCovered() {
 	    	return this.covered;
 	    }
-	    
+	    /**
+	     * Restituisce il corner 
+	     *
+	     * @return Il corner 
+	     */
 	    public Corner getPlayAreaItemCorner() {
 	    	return this.corner;
 	    }
-	    
+	    /**
+	     * Restituisce la carta associata 
+	     *
+	     * @return La carta 
+	     */
 	    public Card getCard() {
 	    	return this.card;
 	    }
-	    
+	    /**
+	     * Restituisce il simbolo generale associato al corner.
+	     *
+	     * @return Il simbolo del corner.
+	     */
 	    public String getGeneralSymbol () {
 	    	return this.simboloGenerale;
 	    }
@@ -374,7 +480,14 @@ public class PlayArea {
 	    	return corner;
 	    }
     }
-    
+    /**
+     * Verifica se tutti gli elementi di una lista (lista1) sono presenti in un'altra lista (lista2).
+     * 
+     * @param <T> Il tipo di elementi nelle liste.
+     * @param lista1 La lista da verificare.
+     * @param lista2 La lista in cui verificare la presenza degli elementi di lista1.
+     * @return true se tutti gli elementi di lista1 sono presenti in lista2, false altrimenti.
+     */
     public static <T> boolean lista1ContenutaInLista2(ArrayList<T> lista1, ArrayList<T> lista2) {
         // copia della lista
         ArrayList<T> tempLista2 = new ArrayList<>(lista2);
@@ -390,7 +503,10 @@ public class PlayArea {
         // Se tutti gli elementi di lista1 sono stati trovati, ritorna true
         return true;
     }
-    
+    /**
+     * Stampa la griglia della PlayArea con bordi e simboli dei corner.
+     * La griglia viene adattata alle dimensioni della PlayArea e contiene informazioni sui bordi e sui simboli presenti.
+     */
     // Metodo per stampare la griglia in maniera decente
     public void printPlayAreaGrid() {
 

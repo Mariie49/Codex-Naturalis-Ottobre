@@ -2,11 +2,17 @@ package cards;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
+
 
 import game.PlayArea;
 import game.PlayArea.PlayAreaItem;
-
+/**
+ * La classe ObjectiveCard rappresenta una carta obiettivo nel gioco. 
+ * Essa estende la classe Card e contiene informazioni sui requisiti 
+ * necessari per ottenere punti in base alla configurazione della 
+ * PlayArea. I requisiti possono includere simboli, simboli speciali 
+ * e posizioni specifiche delle carte nel campo di gioco.
+ */
 public class ObjectiveCard extends Card {
 
 	private CardType type = CardType.OBJECTIVE;
@@ -16,6 +22,12 @@ public class ObjectiveCard extends Card {
 	private Object[][] positionRequirement;
 	private int pointsPerRequirement = 999;//per il debug
 	
+	/**
+     * Calcola i punti guadagnati dalla carta obiettivo in base alla PlayArea.
+     *
+     * @param playArea L'area di gioco in cui sono posizionate le carte.
+     * @return I punti guadagnati dalla carta obiettivo.
+     */
 	
 	// Metodo importantissimo che calcola i punti in base alla PlayArea;
 	@Override
@@ -25,10 +37,10 @@ public class ObjectiveCard extends Card {
 		switch (this.requirementType) {
 		
 			case SYMBOL_REQUIREMENT:
-				points = pointsPerRequirement * quanteLista1ContenutaInLista2(this.symbolRequirement,playArea.getSymbolList());
+				points = pointsPerRequirement * lista1InLista2(this.symbolRequirement,playArea.getSymbolList());
 			break;
 			case SPECIALSYMBOL_REQUIREMENT:
-				points = pointsPerRequirement * quanteLista1ContenutaInLista2(this.specialSymbolRequirement,playArea.getSpecialSymbolList());
+				points = pointsPerRequirement * lista1InLista2(this.specialSymbolRequirement,playArea.getSpecialSymbolList());
 			break;
 			case POSITION_REQUIREMENT:
 				/* Il position requirement è strutturato in questo modo:
@@ -178,7 +190,10 @@ public class ObjectiveCard extends Card {
 		return points;
 	}
 	
-	@Override
+	 /**
+     * Stampa i dettagli della carta obiettivo.
+     */
+    @Override
 	public void printCard() {		
 		
 		System.out.println("\nObjective card numero: " + this.getNumber());
@@ -249,7 +264,14 @@ public class ObjectiveCard extends Card {
 		}
 		
 	}
-
+    /**
+    * Questo costruttore imposta i valori della carta obiettivo in base al valore di n.
+    * Ogni valore di n corrisponde a un insieme specifico di requisiti e punti.
+    *
+    * @param n Un intero che determina il tipo di carta obiettivo da creare.
+    *          I valori da 1 a 16 identificano la carta
+    * @throws IllegalArgumentException Se il valore di n non è valido.
+    */
     // Costruttore che accetta int n
     public ObjectiveCard(int n) {
         // Imposta i valori in base a n
@@ -382,8 +404,15 @@ public class ObjectiveCard extends Card {
             
         }
     }
-    
-    public static <T> int quanteLista1ContenutaInLista2(ArrayList<T> lista1, ArrayList<T> lista2) {
+    /**
+     * Conta quante volte gli elementi di una lista sono contenuti in un'altra lista.
+     *
+     * @param lista1 La lista da controllare.
+     * @param lista2 La lista in cui cercare gli elementi di lista1.
+     * @param <T> Il tipo degli elementi nelle liste.
+     * @return Il numero di volte che tutti gli elementi di lista1 sono stati trovati in lista2.
+     */
+    public static <T> int lista1InLista2(ArrayList<T> lista1, ArrayList<T> lista2) {
         // copia della lista
         ArrayList<T> tempLista2 = new ArrayList<>(lista2);
         Boolean bContenuta = true;
@@ -408,76 +437,137 @@ public class ObjectiveCard extends Card {
         
         return nListe1InLista2;
     }
-    
+    /**
+     * Estrae una carta obiettivo dal mazzo
+     *
+     * @param n Un intero che può essere  per determinare il tipo di carta obiettivo da estrarre.
+     * @return Una ObjectiveCard estratta o null se non implementata.
+     */
 	public static ObjectiveCard drawObjectiveCards(int n) {
 		ObjectiveCard card = null;
 		return card;
 	}
-	
+	/**
+	 * enum che definisce i diversi tipi di requisiti che una carta obiettivo può avere.
+	 * I tipi di requisiti includono:
+	 * SYMBOL_REQUIREMENT Richiede una combinazione specifica di simboli.
+	 * SPECIALSYMBOL_REQUIREMENT Richiede una combinazione specifica di simboli speciali.
+	 * POSITION_REQUIREMENT Richiede una combinazione di simboli in posizioni specifiche sulla griglia.
+	 */
 	private enum RequirementType {
 		SYMBOL_REQUIREMENT, SPECIALSYMBOL_REQUIREMENT, POSITION_REQUIREMENT;
 	}
-
+	/**
+	 * Restituisce il tipo di requisito associato a questa carta obiettivo.
+	 *
+	 * @return Il tipo di requisito  di questa carta.
+	 */
 	public RequirementType getRequirementType() {
 		return requirementType;
 	}
 
-
+	/**
+	 * Imposta il tipo di requisito per questa carta obiettivo.
+	 *
+	 * @param requirementType Il tipo di requisito da impostare per questa carta ({@code RequirementType}).
+	 */
 	public void setRequirementType(RequirementType requirementType) {
 		this.requirementType = requirementType;
 	}
 
-
+	/**
+	 * Restituisce i simboli richiesti per soddisfare il requisito di questa carta.
+	 * 
+	 * @return Una lista di simboli  che rappresentano i simboli richiesti.
+	 */
 	public ArrayList<Symbol> getSymbolRequirement() {
 		return symbolRequirement;
 	}
 
-
+	/**
+	 * Imposta i simboli richiesti per soddisfare il requisito di questa carta.
+	 * 
+	 * @param symbolRequirement Una lista di simboli che rappresentano i simboli richiesti.
+	 */
 	public void setSymbolRequirement(ArrayList<Symbol> symbolRequirement) {
 		this.symbolRequirement = symbolRequirement;
 	}
 
-
+	/**
+	 * Restituisce i simboli speciali richiesti per soddisfare il requisito di questa carta.
+	 * 
+	 *
+	 * @return Una lista di simboli speciali richiesti.
+	 */
 	public ArrayList<SpecialSymbol> getSpecialSymbolRequirement() {
 		return specialSymbolRequirement;
 	}
 
-
+	/**
+	 * Imposta i simboli speciali richiesti per soddisfare il requisito di questa carta.
+	 *
+	 *
+	 * @param specialSymbolRequirement Una lista di simboli speciali da impostare.
+	 */
 	public void setSpecialSymbolRequirement(ArrayList<SpecialSymbol> specialSymbolRequirement) {
 		this.specialSymbolRequirement = specialSymbolRequirement;
 	}
 
-
+	/**
+	 * Restituisce la matrice che rappresenta i requisiti di posizione per questa carta.
+	 * 
+	 *
+	 * @return Una matrice di oggetti (code Object[][]) che contiene le coordinate e i simboli richiesti.
+	 */
 	public Object[][] getPositionRequirement() {
 		return positionRequirement;
 	}
 
-
+	/**
+	 * Imposta la matrice dei requisiti di posizione per questa carta.
+	 *
+	 * @param positionRequirement Una matrice di oggetti ( Object[][]) che contiene le coordinate e i simboli da impostare.
+	 */
 	public void setPositionRequirement(Object[][] positionRequirement) {
 		this.positionRequirement = positionRequirement;
 	}
 
-
+	/**
+	 * Restituisce il numero di punti assegnati per ogni requisito soddisfatto.
+	 *
+	 * @return Il numero di punti per ogni requisito soddisfatto.
+	 */
 	public int getPointsPerRequirement() {
 		return pointsPerRequirement;
 	}
 
-
+	/**
+	 * Imposta il numero di punti assegnati per ogni requisito soddisfatto.
+	 *
+	 * @param pointsPerRequirement Il numero di punti da assegnare per ogni requisito soddisfatto.
+	 */
 	public void setPointsPerRequirement(int pointsPerRequirement) {
 		this.pointsPerRequirement = pointsPerRequirement;
 	}
 
 
+	
 	@Override
 	public String getAbbreviatedCorner(CornerPosition cornertype) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	/**
+	 * Restituisce una matrice che rappresenta l'assegnazione dei punti per questa carta.
+	 *
+	 * @return Una matrice di oggetti che rappresenta l'assegnazione dei punti.
+	 */
 	@Override
 	public Object[][] getPointsAssignment() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	@Override
 	public CardType getType() {
 		return this.type;

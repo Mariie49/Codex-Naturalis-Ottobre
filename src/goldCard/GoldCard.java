@@ -7,7 +7,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 import cards.*;
-
+/**
+ * Classe astratta che rappresenta una carta d'oro nel gioco.
+ * Questa classe estende la classe Card e fornisce funzionalità specifiche per le carte d'oro.
+ */
 
 public abstract class GoldCard extends Card {
 
@@ -30,7 +33,11 @@ public abstract class GoldCard extends Card {
 		this.scanner = new Scanner(System.in); // Inizializza lo scanner nel costruttore
 	}
 	
-	
+	/**
+     * Aggiunge i angoli alla carta e imposta la loro posizione.
+     * 
+     * @return Un ArrayList contenente i quattro angoli della carta.
+     */
 	public ArrayList<Corner> addCorners(){
 		ArrayList<Corner> corners = new ArrayList<>();
 		corners.add(corner1);
@@ -43,16 +50,24 @@ public abstract class GoldCard extends Card {
 		return corners;
 	}
 	
-	@Override
+	/**
+     * Crea i requisiti per i punti della carta.
+     * 
+     * @return Un ArrayList di simboli che rappresentano i requisiti.
+     */
+    @Override
 	public ArrayList<Symbol> createRequirementsForPoints() {
 		ArrayList<Symbol> requirements = new ArrayList<>();
 		return requirements;
 	}
 
-	
+    /**
+     * Resetta il mazzo di carte d'oro.
+     * riempie il mazzo con carte da 1 a 40.
+     */
 	public static void resetGoldCards() {
 		goldCardsDeck =new ArrayList<>();
-		boolean mazzoDiCartePersonalizzato = true; // Serve per scegliere, eventualmente, un mazzo di carte personalizzato
+		boolean mazzoDiCartePersonalizzato = false; // Serve per scegliere, eventualmente, un mazzo di carte personalizzato per il debug
 		if (mazzoDiCartePersonalizzato) {
 			// Scegli le carte che vuoi che siano disponibili
 			goldCardsDeck.addAll(Arrays.asList(11,12,13,14,15));
@@ -65,85 +80,115 @@ public abstract class GoldCard extends Card {
 		}
 	}
 	
-	public static ArrayList<Integer> getGoldCardsDeck () {
-		return goldCardsDeck;
-	}
-	
-	
-
-
 	/**
-	 * @return the type
-	 */
-	public CardType getType() {
+     * Ottiene il mazzo di carte d'oro attuale.
+     * 
+     * @return Un ArrayList di interi rappresentanti le carte d'oro nel mazzo.
+     */
+    public static ArrayList<Integer> getGoldCardsDeck() {
+        return goldCardsDeck;
+    }
+
+    /**
+     * Ottiene il tipo di carta.
+     * 
+     * @return Il tipo di carta.
+     */	public CardType getType() {
 		return type;
 	}
 
-	/**
-	 * @return the isFront
-	 */
-	public boolean isFront() {
-		return isFront;
-	}
+     /**
+      * Verifica se la carta è sul fronte.
+      * 
+      * @return {@code true} se la carta è sul fronte, altrimenti {@code false}.
+      */
+     public boolean isFront() {
+         return isFront;
+     }
 
-	/**
-	 * @return the isPlaced
-	 */
-	@Override
-	public boolean isPlaced() {
-		return isPlaced;
-	}
+     /**
+      * Verifica se la carta è stata posizionata.
+      * 
+      * @return true se la carta è posizionata, altrimenti {@code false}.
+      */
+     @Override
+     public boolean isPlaced() {
+         return isPlaced;
+     }
 
-	/**
-	 * @return the number
-	 */
-	public int getNumber() {
-		return number;
-	}
+     /**
+      * Ottiene il numero della carta.
+      * 
+      * @return Il numero della carta.
+      */
+     public int getNumber() {
+         return number;
+     }
+     
+     /**
+      * Ottiene il simbolo del regno associato alla carta.
+      * 
+      * @return Il simbolo del regno.
+      */
+     @Override
+     public Symbol getKingdom() {
+         return kingdom;
+     }
 
-	/**
-	 * @return the kingdom
-	 */
-	@Override
-	public Symbol getKingdom() {
-		return kingdom;
-	}
+     /**
+      * Ottiene il simbolo speciale associato alla carta.
+      * 
+      * @return Il simbolo speciale.
+      */
+     public SpecialSymbol getSpecialSymbol() {
+         return specialSymbol;
+     }
 
-	/**
-	 * @return the specialSymbol
-	 */
-	public SpecialSymbol getSpecialSymbol() {
-		return specialSymbol;
-	}
 
-	/**
-	 * @param isPlaced the isPlaced to set
-	 */
-	@Override
-	public void setPlaced(boolean isPlaced) {
-		this.isPlaced = isPlaced;
-	}
 
-	/**
-	 * @param kingdom the kingdom to set
-	 */
-	public void setKingdom(Symbol kingdom) {
-		this.kingdom = kingdom;
-	}
-	@Override
-	public boolean hasCentralSymbol() {
-		return hasCentralSymbol;
-	}
+     /**
+      * Imposta se la carta è stata posizionata.
+      * 
+      * @param isPlaced true se la carta è posizionata, altrimenti {@code false}.
+      */
+     @Override
+     public void setPlaced(boolean isPlaced) {
+         this.isPlaced = isPlaced;
+     }
 
+     /**
+      * Imposta il simbolo del regno per la carta.
+      * 
+      * @param kingdom Il simbolo del regno da impostare.
+      */
+     public void setKingdom(Symbol kingdom) {
+         this.kingdom = kingdom;
+     }
+
+     /**
+      * Verifica se la carta ha un simbolo centrale.
+      * 
+      * @return true se la carta ha un simbolo centrale, altrimenti {@code false}.
+      */
+     @Override
+     public boolean hasCentralSymbol() {
+         return hasCentralSymbol;
+     }
+
+     /**
+      * Estrae una carta d'oro casuale dal mazzo di carte d'oro.
+      * 
+      * @return La carta d'oro estratta, oppure null se il mazzo è vuoto.
+      */
 
 	public static GoldCard drawGoldCard() {
 		GoldCard card = null;
 		Random random = new Random();
-		if(goldCardsDeck.size()==0) {;return null;}
+		if(goldCardsDeck.size()==0) {return null;}
 		
-		int indiceCasuale = random.nextInt(goldCardsDeck.size()); // Posizione nella lista di carte disponibili
-		int n = goldCardsDeck.get(indiceCasuale); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
-		goldCardsDeck.remove(indiceCasuale);
+		int index = random.nextInt(goldCardsDeck.size()); // Posizione nella lista di carte disponibili
+		int n = goldCardsDeck.get(index); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
+		goldCardsDeck.remove(index);
 		
 		switch(n) {
 		case 1:
@@ -290,8 +335,7 @@ public abstract class GoldCard extends Card {
 	                    return "NUL";
 	                case EMPTY:
 	                    return "EMP";
-	                case HIDDEN:
-	                    return "HID";
+	         
 	                case SYMBOL:
 	                	if (corner.getSymbol() instanceof Symbol) {
 	                        Symbol symbol = (Symbol) corner.getSymbol();
@@ -315,26 +359,13 @@ public abstract class GoldCard extends Card {
 	    }
 	    return "  "; // Angolo non trovato (non dovrebbe accadere)
 	}
-	@Override
-	public void printCardInCell() {
-		if(this.isFront())
-			{
-				System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-				System.out.println("\n");
-				System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT)+"\n");
-			}else {
-				
-				System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-				System.out.println("\n\n    " + getKingdom().getAbbreviation() + "    \n");
-				System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT) + "        "+
-						getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT)+"\n");
-		}
-	}
 	
-
+	
+	/**
+	 * Restituisce la rappresentazione abbreviata di un simbolo nel corner.
+	 * @param position La posizione dell'angolo da cui recuperare l'abbreviazione.
+	 * @return Una stringa che rappresenta lo stato abbreviato o il simbolo dell'angolo, oppure uno spazio ("  ") se l'angolo non è trovato.
+	 */
 	
 	public String getCornerRepresentation(CornerPosition position) {
 		for (Corner corner : addCorners()) {
@@ -344,8 +375,7 @@ public abstract class GoldCard extends Card {
 					return "NULL";
 				case EMPTY:
 					return "EMPTY";
-				case HIDDEN:
-					return "HIDDEN";
+				
 				case SYMBOL:
 					return corner.getSymbol().toString();
 				case SPECIALSYMBOL:
@@ -358,11 +388,11 @@ public abstract class GoldCard extends Card {
 		return "  "; // Angolo non trovato (non dovrebbe accadere)
 	}
 	/**
-	 * Prints the details of the card.
+	 * Stampa i dettagli della carta.
 	 * 
-	 * This method displays the card's type, the side (front or back),
-	 * the corner symbols and center symbols (if present) of that side, and the card's score.
-	 * If the card has no center symbols, a blank line is printed to maintain consistent card height.
+	 * Questo metodo visualizza il tipo della carta, il lato (fronte o retro),
+	 * i simboli degli angoli e, se presenti, i simboli centrali di quel lato, insieme al punteggio della carta.
+	 * Se la carta non ha simboli centrali, viene stampata una riga vuota per mantenere l'altezza uniforme.
 	 */
 	@Override
 	public void printCard() {
@@ -391,9 +421,9 @@ public abstract class GoldCard extends Card {
 		}
 	}
 	/**
-	 * This method displays a menu asking the user to select the front (1) or back (2) side.
-	 * It reads the user's input and sets the isFront property of the card accordingly.
-	 * If the user enters an invalid choice, it defaults to the front side.
+	 * Mostra un menu che chiede all'utente di selezionare il lato della carta, fronte (1) o retro (2).
+	 * @param d La carta su cui scegliere il lato.
+	 * @return La carta con il lato scelto dall'utente.
 	 */
 	@Override
 	public Card ChooseSide(Card d) {
@@ -449,11 +479,18 @@ public abstract class GoldCard extends Card {
 	    return card;
 	}
 
-
+	/**
+	 * Restituisce l'assegnazione dei punti della carta.
+	 * 
+	 * @return Una matrice di oggetti che rappresenta i punti assegnati alla carta.
+	 */
 	public Object[][] getPointsAssignment() {
 		return pointsAssignment;
 	}
-	
+	/**
+	 * Restituisce una rappresentazione testuale dell'assegnazione dei punti della carta.
+	 * @return Una stringa che rappresenta l'assegnazione dei punti.
+	 */
 	public String getStringPointsAssignment() {
 		for (Object[] ii : getPointsAssignment()) {
 	    	// Estraggo la regola di assegnamento che ha punteggio diverso da zero

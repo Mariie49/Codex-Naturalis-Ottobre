@@ -3,7 +3,7 @@ package cards;
 import java.util.Random;
 
 /**
- * Enum representing the different symbols that a card can have.
+ * Enum che rappresenta i diversi simboli che una carta può avere.
  */
 // Enumerazione per i simboli normali (animale, fungo, insetto, vegetale)
 public enum Symbol {
@@ -12,10 +12,10 @@ public enum Symbol {
 	FUNGI_KINGDOM,
 	INSECT_KINGDOM;
 	
-	 /**
-     * Returns a random symbol from the enum.
+	/**
+     * Restituisce un simbolo casuale dall'enumerazione.
      *
-     * @return a random symbol
+     * @return un simbolo casuale.
      */
 	public static Symbol getRandomSymbol() {
         Symbol[] Symbols = Symbol.values();

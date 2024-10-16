@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"Group_12","l":"cards"},{"m":"Group_12","l":"game"},{"m":"Group_12","l":"goldCard"},{"m":"Group_12","l":"initialCard"},{"m":"Group_12","l":"resourceCard"}];updateSearchResults();

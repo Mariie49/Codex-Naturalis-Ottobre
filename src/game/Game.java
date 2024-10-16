@@ -31,7 +31,10 @@ import java.util.Random;
 import java.util.Scanner;
 
 
-
+/**
+ * La classe Game rappresenta una sessione di gioco, 
+ * gestendo i giocatori, le carte e il flusso del gioco.
+ */
 public class Game {
 
 	private ArrayList<Player> playerList;
@@ -51,13 +54,19 @@ public class Game {
 	private boolean resourcesCardsOver = false;
 	private boolean goldCardsOver = false;
 
-
+	/**
+     * Restituisce la lista dei giocatori che partecipano al gioco.
+     *
+     * @return la lista dei giocatori
+     */
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
 	}
 
-
-
+	/**
+     * Costruisce un'istanza di Game, inizializzando la lista dei giocatori e i mazzi di carte.
+     */
+	
 	public Game() {
 		// Inizializzo la lista dei giocatori e delle loro playareas
 		playerList = new ArrayList<Player>();
@@ -73,13 +82,16 @@ public class Game {
 		//matchBoard = new Board();
 
 	}
-
+	/**
+     * Avvia il gioco impostando i giocatori, 
+     * inizializzando i mazzi e distribuendo le carte iniziali.
+     */
 	public void startGame() {	
 		// Inizializza il deck delle ObjectiveCards:
         for (int i = 1; i <= 16; i++) {objectiveCardDeck.add(i);}
         
 		// ------------ Scelta numero di giocatori ------------
-		boolean bypass_numeroGiocatori = true; // bypass scelta giocatori
+		boolean bypass_numeroGiocatori = false; // bypass scelta giocatori
 		
 		if (!bypass_numeroGiocatori) {
 			String name;
@@ -108,7 +120,7 @@ public class Game {
 					}
 				}
 				if (isDuplicated) {
-					System.out.println("Nome gi� utilizzato. Per favore, inserisci un nome diverso.");
+					System.out.println("Nome già utilizzato. Per favore, inserisci un nome diverso.");
 				} else {
 					playerList.add(new Player(ii, name));
 					ii++;
@@ -116,8 +128,8 @@ public class Game {
 			} while ( ii < numPlayers+1);
 		}
 		else {
-			numPlayers = 1;
-			playerList.add(new Player(1, "zio Adolfo"));
+			numPlayers = 1;// per il debugging
+			playerList.add(new Player(1, "zio Martino"));
 		}
 		
 		// ------------ Stampa i nomi dei giocatori ------------
@@ -221,7 +233,12 @@ public class Game {
 		Collections.shuffle(playerList);
 		playerList.get(0).setIsFirst(true);
 	}
-
+	/**
+     * Esegue il turno di un giocatore nel gioco.
+     *
+     * @param currentPlayer il giocatore il cui turno è in corso
+     * @return true se il gioco è finito, false altrimenti
+     */
 	public boolean turn (Player currentPlayer) {
 		Card chosenCard = null;
 		Card chosenCardSide = null;
@@ -438,7 +455,8 @@ public class Game {
 	}
 	
 
-	// Altri metodi
+	/*
+	 * // Altri metodi
 	private int getMaxTurnsPlayed() {
 		int maxTurns = 0;
 		for (int turns : playerTurnsPlayed) {
@@ -460,6 +478,7 @@ public class Game {
 		//da fare
 		System.out.println("Partita terminata!");
 	}
+	 */
 
 	/**
 	 * Verifica se l'utente risponde si oppure no. Le valide risposte sono : 'Y', 'Yes', 'yes', 'N', 'No', or 'no'
@@ -482,6 +501,12 @@ public class Game {
 	}
 	*/
 	
+	
+	/**
+     * Assegna punti al giocatore in base alle carte obiettivo.
+     *
+     * @param player il giocatore a cui assegnare i punti
+     */
 	public void assignObjectiveCardPoints (Player player) {
 		
 		int objectiveCardPoints = player.getPlayerObjectiveCard().calculateObjectiveCardPoints(player.getPlayArea());
@@ -515,7 +540,9 @@ public class Game {
 	*/
 
 	
-	//da fare
+	/**
+     * Determina il vincitore del gioco in base ai punti e agli obiettivi raggiunti.
+     */
 	public void determineWinner() {
 		Player winner = null;
 		int maxScore = Integer.MIN_VALUE;
@@ -570,7 +597,11 @@ public class Game {
 
 
 
-
+	/**
+	 * Restituisce una classifica dei giocatori ordinata in base al loro punteggio, in ordine decrescente.
+	 * 
+	 * @return un ArrayList di oggetti Player ordinati dal punteggio più alto a quello più basso
+	 */
 
 	public ArrayList<Player> rankings(){
 		ArrayList<Player> sortedRanking;
@@ -584,10 +615,11 @@ public class Game {
 	}
 
 	/**
-	 * Fast way to print an ArrayList of Cards with an index on top of the row
+	 * Metodo rapido per stampare un ArrayList di oggetti Card con un indice nella riga superiore.
 	 *
-	 * @param cards
+	 * @param genericCards un ArrayList di Card da stampare
 	 */
+	
 	public void printCardArrayList(ArrayList<Card> genericCards) {
 
 		for (int i = 0; i < genericCards.size(); i++) {
@@ -601,7 +633,8 @@ public class Game {
 		System.out.println();
 	}
 
-	private void updatevisibleCards() {
+	/*
+	 * private void updatevisibleCards() {
 		int goldCount = 0;
 		int resourceCount = 0;
 
@@ -641,26 +674,52 @@ public class Game {
 		}
 
 	}
+	 */
 
 
-
+	/**
+	 * Restituisce i punti necessari per terminare il gioco.
+	 *
+	 * @return un intero che rappresenta i punti rimanenti per terminare il gioco
+	 */
 	public int getPointsToEnd() {
 		return pointsToEnd;
 	}
+	/**
+	 * Imposta lo stato che indica che le carte risorse sono terminate.
+	 */
 	public void setResourcesCardsOver() {
 		this.resourcesCardsOver = true;
 	}
+	/**
+	 * Imposta lo stato che indica che le carte d'oro sono terminate.
+	 */
 	public void setGoldCardsOver() {
 		this.goldCardsOver = true;
 	}
 
-
+	/**
+	 * Imposta i punti necessari per l'ultimo round.
+	 *
+	 * @param pointsToEnd il numero di punti rimanenti per terminare il gioco
+	 */
 	public void setPointsToEnd(int pointsToEnd) {
 		this.pointsToEnd = pointsToEnd;
 	}
+	
+	/**
+	 * Imposta lo stato che indica se l'ultimo round è in corso.
+	 *
+	 * @param in_lastRound true se è l'ultimo round, false altrimenti
+	 */
 	public void setLastRound(boolean in_lastRound) {
 		this.lastRound = in_lastRound;
 	}
+	/**
+	 * Restituisce lo stato che indica se l'ultimo turno è in corso.
+	 *
+	 * @return true se è l'ultimo round, false altrimenti
+	 */
 	public boolean getLastRound() {
 		return this.lastRound;
 	}

@@ -1,9 +1,12 @@
 package cards;
 
 /**
- * Enum representing the type of the card.
+ * Enum che rappresentanoi diversi tipi di mazzi
  */
-// Enumerazione per i tipi di carta
+ 
 public enum CardType {
 	RESOURCE, GOLD, OBJECTIVE, STARTING
 }
+
+
+

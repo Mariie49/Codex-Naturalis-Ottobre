@@ -14,8 +14,6 @@ import cards.Symbol;
 
 /**
  * classe astratta per creazione delle carte di tipo risorsa
- * 
- *
  */
 public abstract class ResourceCard extends Card {
 	private CardType type = CardType.RESOURCE; // Tipo di carta
@@ -36,15 +34,26 @@ public abstract class ResourceCard extends Card {
 		this.scanner = new Scanner(System.in); // Inizializza lo scanner nel costruttore
 	}
 	
-	@Override
+	 /**
+     * Restituisce il numero della carta.
+     * @return numero della carta
+     */
+    @Override
 	public int getNumber() {
 		return number;
 	}
-	
+    /**
+     * Restituisce il numero della carta risorsa.
+     * @return numero della carta risorsa
+     */
 	public int getResourceCardNumber() {
 		return this.number;
 	}
-	@Override
+	/**
+     * Aggiunge gli angoli alla carta e assegna la loro posizione.
+     * @return lista di angoli della carta
+     */
+    @Override
 	public ArrayList <Corner> addCorners (){
 		ArrayList <Corner> corners = new ArrayList<>();
 		corners.add(corner1);
@@ -56,10 +65,12 @@ public abstract class ResourceCard extends Card {
 		}
 		return corners;
 	}
-
+    /**
+     * Resetta il mazzo delle carte risorsa
+     */
 	public static void resetResourceCards() {
 		resourceCardsDeck =new ArrayList<>();
-		boolean mazzoDiCartePersonalizzato = true;
+		boolean mazzoDiCartePersonalizzato = false;
 		if (mazzoDiCartePersonalizzato) {
 			// Scegli le carte che vuoi che siano disponibili
 			resourceCardsDeck.addAll(Arrays.asList(11,12,13,14,15));
@@ -71,12 +82,15 @@ public abstract class ResourceCard extends Card {
 			}	
 		}
 	}
-	
+	/**
+     * Restituisce il mazzo di carte risorsa.
+     * @return mazzo di carte risorsa
+     */
 	public static ArrayList<Integer> getResourceCardsDeck () {
 		return resourceCardsDeck;
 	}
 	/**
-	 * metodo per assegnare una carta  casuale
+	 * metodo per pescare una carta casuale
 	 * @return carta risorsa
 	 */
 	public static ResourceCard drawResourceCard() {
@@ -84,9 +98,9 @@ public abstract class ResourceCard extends Card {
 		Random random = new Random();
 		if(resourceCardsDeck.size()==0) {return null;}
 		
-		int indiceCasuale = random.nextInt(resourceCardsDeck.size()); // Posizione nella lista di carte disponibili
-		int n = resourceCardsDeck.get(indiceCasuale); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
-		resourceCardsDeck.remove(indiceCasuale);
+		int index = random.nextInt(resourceCardsDeck.size()); // Posizione nella lista di carte disponibili
+		int n = resourceCardsDeck.get(index); // ottendo il numero della carta che si trova in posizione "indiceCasuale"
+		resourceCardsDeck.remove(index);
 		
 		switch(n) {
 		case 1:
@@ -227,27 +241,53 @@ public abstract class ResourceCard extends Card {
 		return card;
 	}
 	
-	public CardType getType() {
-		return type;
-	}
-	@Override
-	public boolean isPlaced() {
-		return isPlaced;
-	}
-	@Override
+	/**
+     * Restituisce il tipo di carta.
+     * @return tipo di carta
+     */
+    public CardType getType() {
+        return type;
+    }
+
+    /**
+     * Verifica se la carta è posizionata sulla playArea.
+     * @return true se la carta è posizionata, altrimenti false
+     */
+    @Override
+    public boolean isPlaced() {
+        return isPlaced;
+    }
+
+    /**
+     * Imposta se la carta è posizionata sulla PlayArea.
+     * @param isPlaced boolean che indica se la carta è posizionata sulla playArea
+     */
+    @Override
 	public void setPlaced(boolean isPlaced) {
 		this.isPlaced = isPlaced;
 	}
 	
-	@Override
-	public Symbol getKingdom() {
-		return this.symbol;
-	}
+	/**
+     * Restituisce il simbolo del regno (Kingdom) della carta.
+     * @return simbolo del regno
+     */
+    @Override
+    public Symbol getKingdom() {
+        return this.symbol;
+    }
 
-	public boolean isFront() {
-		return isFront;
-	}
-	@Override
+    /**
+     * Verifica se il fronte della carta è visibile.
+     * @return true se il fronte è visibile, altrimenti false
+     */
+    public boolean isFront() {
+        return isFront;
+    }
+    /**
+     * Verifica se la carta ha un simbolo centrale.
+     * @return true se ha un simbolo centrale, altrimenti false
+     */
+    @Override
 	public boolean hasCentralSymbol() {
 		return hasCentralSymbol;
 	}
@@ -266,8 +306,7 @@ public abstract class ResourceCard extends Card {
 					return "NULL";
 				case EMPTY:
 					return "EMPTY";
-				case HIDDEN:
-					return "HIDDEN";
+				
 				case SYMBOL:
 					return corner.getSymbol().toString();
 				case SPECIALSYMBOL:
@@ -287,8 +326,7 @@ public abstract class ResourceCard extends Card {
 	                    return "NUL";
 	                case EMPTY:
 	                    return "EMP";
-	                case HIDDEN:
-	                    return "HID";
+	                
 	                case SYMBOL:
 	                	if (corner.getSymbol() instanceof Symbol) {
 	                        Symbol symbol = (Symbol) corner.getSymbol();
@@ -312,30 +350,9 @@ public abstract class ResourceCard extends Card {
 	    }
 	    return "  "; 
 	}
-	@Override
-	public void printCardInCell() {
-		if(this.isFront())
-			{
-				System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-				System.out.println("\n");
-				System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT)+"\n");
-			}else {
-				
-				System.out.print(getAbbreviatedCorner(CornerPosition.TOP_LEFT) + "        "+
-						getAbbreviatedCorner(CornerPosition.TOP_RIGHT));
-				System.out.println("\n\n    " + getKingdom().getAbbreviation() + "    \n");
-				System.out.println(getAbbreviatedCorner(CornerPosition.BOTTOM_RIGHT) + "        "+
-						getAbbreviatedCorner(CornerPosition.BOTTOM_LEFT)+"\n");
-		}
-	}
+	
 	/**
-	 * Prints the details of the card.
-	 * 
-	 * This method displays the card's type, the side (front or back),
-	 * the corner symbols and Central symbols (if present) of that side, and the card's score.
-	 * If the card has no Central symbols, a blank line is printed to maintain consistent card height.
+	 * Stampa i dettagli della carta.
 	 */
 	@Override
 	public void printCard() {
@@ -395,10 +412,11 @@ public abstract class ResourceCard extends Card {
 		}}
 		*/
 	/**
-	 * This method displays a menu asking the user to select the front (1) or back (2) side.
-	 * It reads the user's input and sets the isFront property of the card accordingly.
-	 * If the user enters an invalid choice, it defaults to the front side.
+	 * Mostra un menu che chiede all'utente di selezionare il lato frontale (1) o retro (2) della carta.
+	 * @param d La carta di cui scegliere il lato.
+	 * @return La carta aggiornata con il lato scelto dall'utente.
 	 */
+	
 	@Override
 	public Card ChooseSide(Card d) {
 	    ResourceCard card = null;
