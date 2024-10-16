@@ -2,6 +2,8 @@ Questo progetto è un'implementazione in Java del gioco da tavolo Codex Naturali
 
 
 Caratteristiche: 
+
+
 •	Regole di Codex Naturalis: Il gioco simula le regole ufficiali di Codex Naturalis, incluse le diverse tipologie di (risorsa, oro, iniziali, obiettivo), i requisiti di piazzamento e il sistema di punteggio basato su obiettivi.
 
 •	Interfaccia a linea di comando: L'interazione con il gioco avviene tramite un'intuitiva interfaccia a linea di comando, che guida i giocatori attraverso le scelte e le azioni disponibili.
